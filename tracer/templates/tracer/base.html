@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Tracer App</title>
+</head>
+<body>
+<div>
+    <button id="send-message">Send Message</button>
+	<ul>
+		<li>
+			<strong>Total active connections count: </strong> <span id="active-connections"></span>
+		</li>
+		<li>
+			<strong>Unique connections count: </strong> <span id="unique-connections"></span>
+		</li>
+	</ul>
+</div>
+
+
+
+<script>
+      var active_connections = document.getElementById('active-connections');
+      var unique_connections = document.getElementById('unique-connections');
+      var send_message_btn = document.getElementById('send-message');
+
+      var ws = new WebSocket("ws://localhost:8081/websocket");
+      
+      ws.onopen = function() {
+          ws.send(JSON.stringify({
+              'action': 'subscribe',
+              'room': 'admin'
+          }));
+      };
+
+      ws.onmessage = function (evt) {
+          var data = JSON.parse(evt.data);
+          active_connections.innerHTML = data.active_connections_count;
+          unique_connections.innerHTML = data.unique_connections_count;
+      };
+
+</script>
+</body>
+</html>

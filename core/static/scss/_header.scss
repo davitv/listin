@@ -1,0 +1,145 @@
+.header {
+  @include clearfix;
+  position: relative;
+  margin-bottom: 15px;
+  width: 100%;
+  height: 45px;
+  min-height: 45px;
+  background: #6681A2;
+  padding: 0;
+  box-shadow: none;
+  filter: none;
+  z-index: 11;
+  .menu-trigger {
+    float: left;
+    background: transparent;
+    border: none;
+    border-right: 1px solid #89A1BF;
+    outline: 0;
+    padding: 13px 20px;
+    margin-right: 20px;
+    &.active {
+      background-color: #D5D4FF;
+    }
+    .fa {
+      color: #fff;
+    }
+  }
+  .logo {
+    width: auto;
+    max-height: 68px;
+    line-height: 41px;
+    float: left;
+
+    > a {
+      text-decoration: none;
+      font-size: 22px;
+      color: #797777;
+      font-weight: bold;
+      text-shadow: 1px 1px 1px #ECECEC;
+      img {
+        width: 80px;
+      }
+    }
+  }
+
+  .btn-wrapper {
+    line-height: 45px;
+    padding: 0 25px;
+  }
+  .filters-list {
+    > li {
+      > a {
+            padding: 20px;
+        font-size: 20px;
+        display: block;
+      }
+    }
+  }
+
+  .dropdown-link,
+  .btn-link{
+    color: #fff;
+    text-decoration: none;
+    &:hover,
+    &:focus,
+    &:active {
+      background-color: #3f4f62;
+    }
+  }
+  .dropdown-link {
+    padding: 0 7px;
+    display: inline-block;
+  }
+  .profile-link {
+    > img {
+      border-radius: 100%;
+      width: 27px;
+    }
+  }
+
+}
+.header-form {
+  width: 300px;
+  float: left;
+  padding: 0 15px;
+  margin-left: 15px;
+  .input-group-addon {
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom-color: #fff;
+    color: #fff;
+
+    left: -1px;
+    position: relative;
+  }
+  .form-control {
+    background-color: transparent;
+    border-color: transparent;
+    border-bottom-color: #fff;
+    color: #fff;
+    -webkit-box-shadow: none;
+    -moz-box-shadow: none;
+    box-shadow: none;
+  }
+}
+.filters-toggler {
+  display: none;
+}
+
+@media (max-width: 980px) {
+
+  .filters-toggler {
+    display: inline-block;
+  }
+  .header {
+
+  .btn-wrapper {
+    padding: 0;
+    .btn {
+    }
+  }
+  }
+}
+@media (max-width: 740px) {
+
+  .header-form {
+    width: 190px;
+  }
+  .header {
+    .container {
+      padding: 0;
+    }
+  }
+}
+
+@media (max-width: 520px) {
+  .header {
+    .container {
+      padding: 0;
+    }
+  }
+  .header-form {
+    display: none;
+  }
+}

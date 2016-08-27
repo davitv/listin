@@ -1,0 +1,207 @@
+{% extends 'base.html' %}
+
+{% load staticfiles i18n %}
+{% block content %}
+<div class="container">
+   <form action="{% url 'api-products-list' %}" method="POST" enctype="multipart/form-data" id="product-form"> {% csrf_token %}
+        <div class="form-widget">
+            <div class="headline">
+                <h3>{% trans "ADD/EDIT PRODUCT" %}</h3>
+            </div>
+            <div class="caption">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="form-group {% if form.name.errors %}has-error{% endif %}">
+                            <label class="control-label">{% trans "Title" %}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-edit fa-fw"></i>
+                                </span>
+                                <input type="text" value="{{ form.name.value|default_if_none:'' }}"
+                                       name="name"
+                                       class="form-control" placeholder="{% trans "name of your product" %}"> </div>
+                                {% if form.name.errors %}
+                                    <span class="help-block">{{ form.name.errors.as_text }}</span>
+                                {% endif %}
+                        </div>
+                    </div>
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <label class="control-label" for="product-category-input">{% trans "Category" %}</label>
+                        <div class="input-group">
+                            <span class="input-group-addon">
+                                <i class="fa fa-edit fa-fw"></i>
+                            </span>
+                            <select name="category" id="product-category-input" class="form-control">
+                                <option value="">{% trans "Unset" %}</option>
+                                {% for category in categories %}
+                                    <optgroup label="{{ category.name }}">
+                                        {% if category.children %}
+                                            {% for child in category.children %}
+                                                <option value="{{ child.pk }}" {% if instance.category.pk == child.pk %}selected{% endif %}>{{ child.name }}</option>
+                                            {% endfor %}
+                                        {% endif %}
+
+                                    </optgroup>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+
+                        <div class="form-group">
+                            <label for="">{% trans "Product image" %}</label>
+                            <div class="upload-component upload-component-image" id="upload-component">
+                                <div class="upload-component-preview" >
+                                    <div class="upload-component-preview-caption"> Click here to add a file</div>
+                                </div>
+                                <div class="upload-component-caption hidden" >
+                                    <a href="#" class="upload-component-btn upload-component-add" id="add-file">Change file</a>
+                                    <a href="#" class="upload-component-btn upload-component-right upload-component-remove ">Remove file</a>
+                                </div>
+                                <input type="file" name="image" class="upload-component-input"/>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-8">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="form-group {% if form.price.errors %}has-error{% endif %}">
+                                    <label class="control-label">{% trans "Main Price" %}</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-money fa-fw"></i>
+                                        </span>
+                                        <input type="text" value="{{ form.price.value|default_if_none:'' }}"
+                                               name="price" class="form-control"
+                                               placeholder="{% trans "The price of it..." %}"> </div>
+                                        {% if form.price.errors %}
+                                            <span class="help-block">{{ form.price.errors.as_text }}</span>
+                                        {% endif %}
+                                </div>
+
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group {% if form.price.errors %}has-error{% endif %}">
+                                    <label class="control-label">{% trans "Amount" %}</label>
+                                    <div class="input-group">
+                                        <span class="input-group-addon">
+                                            <i class="fa fa-sort-numeric-desc fa-fw"></i>
+                                        </span>
+                                        <input type="text" value="{{ form.quantity.value|default_if_none:'' }}"
+                                               name="quantity" class="form-control"
+                                               placeholder="{% trans "The price of it..." %}"> </div>
+                                        {% if form.quantity.errors %}
+                                            <span class="help-block">{{ form.quantity.errors.as_text }}</span>
+                                        {% endif %}
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-group">
+                                    <label for="select-product-type">{% trans "Type of product" %}</label>
+                                    <select name="kind" id="select-product-type">
+                                        <option value="0" {% if instance.product.kind == 0 %}selected{% endif %}>{% trans "Product" %}</option>
+                                        <option value="1" {% if instance.product.kind == 1 %}selected{% endif %}>{% trans "Service" %}</option>
+                                        <option value="2" {% if instance.product.kind == 2 %}selected{% endif %}>{% trans "Project" %}</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="form-group">
+                            <label for="textarea-product-desciption">{% trans "Detailed description" %}</label>
+                            <textarea name="description" class="form-control" id="textarea-product-desciption" cols="30"
+                                      rows="6">{{ instance.product.description }}</textarea>
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr>
+                <label for="">{% trans "Additional product details:" %} </label>
+                <div>
+                    <label class="checkbox-inline">
+                      <input type="checkbox" id="checkbox-is_featured" {% if instance.is_featured %}checked{% endif %} />
+                        {% trans "Featured product" %}
+                    </label>
+
+                    <label class="checkbox-inline">
+                      <input type="checkbox" id="checkbox-is_popular" {% if instance.is_popular %}checked{% endif %}  />
+                        {% trans "Popular product" %}
+                    </label>
+                </div>
+
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors.as_text }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="widget-footer">
+                <input type="hidden" name="organization" value="{{ organization.pk }}"/>
+                <input type="hidden" id="hidden-is_featured" name="is_featured" value="{% if instance.is_featured %}1{% else %}0{% endif %}"/>
+                <input type="hidden" id="hidden-is_popular" name="is_popular" value="{% if instance.is_popular %}1{% else %}0{% endif %}"/>
+                {% if instance %}
+                <input type="hidden" name="pk" value="{{ instance.product.pk }}"/>
+                {% endif %}
+
+                <button class="btn btn-primary">{% trans "Submit" %}</button>
+            </div>
+        </div>
+   </form>
+</div>
+{% endblock %}
+
+{% block page-js %}
+    <script src="{% static 'js/auto-complete.js' %}"></script>
+    <script src="{% static 'js/utils.js' %}"></script>
+    <script src="{% static 'js/uploader.js' %}"></script>
+<script>
+(function(){
+    var product_form = document.getElementById('product-form');
+    product_form.addEventListener('submit', function(event){
+        event.preventDefault();
+        utils.sendForm(this,
+            function(res){
+                window.location.href = "{% url 'organization-view' organization.slug %}";
+            },
+            function(form, res){
+               res = JSON.parse(res);
+               for(var k in res)
+               {
+                   if(!res.hasOwnProperty(k)) continue;
+                   var elem = form.querySelector('[name=' + k + ']');
+                   var parent = elem.parentNode.parentNode;
+                   parent.classList.add('has-error');
+                   var error_caption = document.createElement('p');
+                   error_caption.innerHTML = res[k];
+                   error_caption.className = 'help-block';
+                   parent.appendChild(error_caption)
+               }
+            }
+        );
+    });
+
+    var is_featured_checkbox = document.getElementById('checkbox-is_featured');
+    is_featured_checkbox.addEventListener('change', function(event){
+        document.getElementById('hidden-is_featured').value = this.checked ? 1 : 0;
+    });
+
+    var is_popular_checkbox = document.getElementById('checkbox-is_popular');
+    is_popular_checkbox.addEventListener('change', function(event){
+        document.getElementById('hidden-is_popular').value = this.checked ? 1 : 0;
+    });
+
+    var component = document.getElementsByClassName('upload-component')[0];
+    var uploader = new Uploader(component, {
+        initialImagePath: "{% if instance.image %}{{ instance.image.crop.500x500 }}{% endif %}"
+    });
+
+})()
+</script>
+{% endblock %}

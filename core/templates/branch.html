@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+<div class="gutter20"></div>
+<div class="col-md-6 col-md-offset-3">
+<form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="form-widget">
+            <div class="headline">
+                <h3>{% trans "ADD/EDIT BRANCH" %}</h3>
+            </div>
+            <div class="caption">
+            {% include 'forms/branch.html' with form=form %}
+            </div>
+        </div>
+</div>
+{% endblock %}

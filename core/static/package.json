@@ -1,0 +1,17 @@
+{
+  "name": "listin",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "babel --watch jsx/ --out-dir js/ "
+  },
+  "devDependencies": {
+    "babel-cli": "^6.11.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "~6.5.0"
+  },
+  "dependencies": {
+    "bower": "~1.7.7",
+    "react-redux": "^4.4.5",
+    "redux": "^3.5.2"
+  }
+}

@@ -1,0 +1,96 @@
+{% load i18n staticfiles %}
+{% csrf_token %}
+
+      <h4>{% trans "Education" %}</h4>
+      <div class="row cloneable-form" id="education-forms">
+          <div class="form-instance" data-index="0">
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label for="education-0-university" class="control-label">{% trans "University" %}</label>
+                      <input name="education-0-university" id="education-0-university"
+                             class="form-control" value=""/>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label for="education-0-speciality" class="control-label">{% trans "Speciality" %}</label>
+                      <input name="education-0-speciality" id="education-0-speciality"
+                             class="form-control" value=""/>
+                  </div>
+              </div>
+              <div class="col-md-4">
+                  <div class="form-group">
+                      <label for="education-0-degree" class="control-label">{% trans "Degree" %}</label>
+                      <input name="education-0-degree" id="education-0-degree" class="form-control" value=""/>
+                  </div>
+              </div>
+          </div>
+      </div>
+      <div class="btn btn-default clone-toggler" data-add="education-forms"><i class="fa fa-plus"></i> {% trans "Add another one" %}</div>
+      <hr>
+      <h4>{% trans "Professional knowledges" %}</h4>
+      <div class="row">
+          <div class="col-sm-6">
+              <div class="form-group list-input">
+                <label for="" class="control-label">{% trans "Skills" %}</label>
+                <div class="list-wrapper"></div>
+                <div class="input-group">
+                  <input type="text" name="skills"  class="form-control" placeholder="{% trans "Skill name" %}">
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary add-value" type="button">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
+              </div>
+          </div>
+          <div class="col-sm-6">
+              <div class="form-group list-input">
+                <label for="" class="control-label">{% trans "Languages" %}</label>
+                  <div class="list-wrapper"></div>
+                <div class="input-group">
+                  <input type="text" class="form-control" name="languages" placeholder="{% trans "Language name" %}">
+                  <span class="input-group-btn">
+                    <button class="btn btn-primary add-value" type="button">
+                        <i class="fa fa-plus"></i>
+                    </button>
+                  </span>
+                </div><!-- /input-group -->
+              </div>
+          </div>
+      </div>
+        <hr>
+        <h4>{% trans "Working experience" %}</h4>
+        <div class="row">
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label for="cv-speciality" class="control-label">{% trans "Industry" %}</label>
+                  <input name="name" id="cv-speciality" class="form-control" value="{{ form.description.value|default_if_none:"" }}"/>
+              </div>
+          </div>
+          <div class="col-md-4">
+              <div class="form-group">
+                  <label for="cv-speciality" class="control-label">{% trans "Position" %}</label>
+                  <input name="name" id="cv-speciality" class="form-control" value="{{ form.description.value|default_if_none:"" }}"/>
+              </div>
+          </div>
+          <div class="col-md-4">
+
+          <div class="form-group">
+              <label for="cv-degree" class="control-label">{% trans "Working time perioud" %}</label>
+              <input name="name" id="cv-degree" class="form-control" value="{{ form.description.value|default_if_none:"" }}"/>
+          </div>
+          </div>
+        </div>
+        <div class="btn  btn-default"><i class="fa fa-plus"></i> {% trans "Add another one" %}</div>
+        <hr>
+          <div class="form-group">
+              <label for="cv-description" class="control-label">{% trans "About" %}</label>
+              <textarea name="description" id="cv-description" cols="30" rows="5" class="form-control">{{ form.description.value|default_if_none:"" }}</textarea>
+          </div>
+{% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {{ form.non_field_errors.as_text }}
+    </div>
+{% endif %}
+

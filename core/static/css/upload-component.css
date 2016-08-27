@@ -1,0 +1,95 @@
+/*
+Error: Undefined mixin 'clearfix'.
+        on line 25 of scss/upload-component.scss, in `clearfix'
+        from line 25 of scss/upload-component.scss
+
+20:   &.upload-component-image {
+21:     min-height: 200px;
+22:     background-color: #F0F0F0;
+23: 
+24:     .upload-component-caption {
+25:       @include clearfix;
+26:       position: absolute;
+27: 
+28:       top: 0;
+29:       left: 0;
+30:       display: block;
+
+Backtrace:
+scss/upload-component.scss:25:in `clearfix'
+scss/upload-component.scss:25
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:349:in `block in visit_mixin'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:98:in `block in with_mixin'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:115:in `with_frame'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:98:in `with_mixin'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:347:in `visit_mixin'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:36:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `block in visit'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `block in with_base'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:115:in `with_frame'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `with_base'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:431:in `block (2 levels) in visit_rule'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:431:in `map'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:431:in `block in visit_rule'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:179:in `with_environment'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:429:in `visit_rule'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:36:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `block in visit'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `block in with_base'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:115:in `with_frame'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `with_base'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:431:in `block (2 levels) in visit_rule'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:431:in `map'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:431:in `block in visit_rule'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:179:in `with_environment'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:429:in `visit_rule'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:36:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `block in visit'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `block in with_base'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:115:in `with_frame'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `with_base'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:431:in `block (2 levels) in visit_rule'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:431:in `map'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:431:in `block in visit_rule'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:179:in `with_environment'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:429:in `visit_rule'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:36:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `block in visit'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `block in with_base'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:115:in `with_frame'
+/usr/lib/ruby/vendor_ruby/sass/stack.rb:79:in `with_base'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:158:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:52:in `block in visit_children'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:52:in `map'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:52:in `visit_children'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:167:in `block in visit_children'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:179:in `with_environment'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:166:in `visit_children'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:36:in `block in visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:186:in `visit_root'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/base.rb:36:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:157:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/visitors/perform.rb:8:in `visit'
+/usr/lib/ruby/vendor_ruby/sass/tree/root_node.rb:36:in `css_tree'
+/usr/lib/ruby/vendor_ruby/sass/tree/root_node.rb:29:in `render_with_sourcemap'
+/usr/lib/ruby/vendor_ruby/sass/engine.rb:378:in `_render_with_sourcemap'
+/usr/lib/ruby/vendor_ruby/sass/engine.rb:295:in `render_with_sourcemap'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:490:in `update_stylesheet'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:209:in `each'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/usr/lib/ruby/vendor_ruby/sass/plugin/compiler.rb:293:in `watch'
+/usr/lib/ruby/vendor_ruby/sass/plugin.rb:109:in `method_missing'
+/usr/lib/ruby/vendor_ruby/sass/exec/sass_scss.rb:379:in `watch_or_update'
+/usr/lib/ruby/vendor_ruby/sass/exec/sass_scss.rb:51:in `process_result'
+/usr/lib/ruby/vendor_ruby/sass/exec/base.rb:52:in `parse'
+/usr/lib/ruby/vendor_ruby/sass/exec/base.rb:19:in `parse!'
+/usr/bin/sass:8:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Error: Undefined mixin 'clearfix'.\A         on line 25 of scss/upload-component.scss, in `clearfix'\A         from line 25 of scss/upload-component.scss\A \A 20:   &.upload-component-image {\A 21:     min-height: 200px;\A 22:     background-color: #F0F0F0;\A 23: \A 24:     .upload-component-caption {\A 25:       @include clearfix;\A 26:       position: absolute;\A 27: \A 28:       top: 0;\A 29:       left: 0;\A 30:       display: block;"; }

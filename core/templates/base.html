@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load staticfiles i18n %}
+    {% get_available_languages as languages %}
+    {% get_current_language as LANGUAGE_CODE %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>{{ request.site.name }}</title>
+
+    <link href="http://fonts.googleapis.com/css?family=Open+Sans:400,300,600,700&subset=all" rel="stylesheet" type="text/css" />
+    {% block gloabal-css %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    {% endblock %}
+    {% block page-css %}{% endblock %}
+</head>
+<body class="{% block body-class %}{% endblock %}">
+
+{% block header %}
+<div class="header">
+    <div class="container">
+        <button class="menu-trigger" id="favorites-toggler"><i class="fa fa-star"></i> </button>
+        <div class="logo">
+            {% if request.site.domain == 'listin.am' %}
+                <a href="{% url 'homepage' %}"><img src="{% static 'img/listin.am.png' %}" alt=""></a>
+            {% else %}
+                <a href="{% url 'homepage' %}"><img src="{% static 'img/listin.png' %}" alt=""></a>
+            {% endif %}
+        </div>
+        <div class="header-form">
+            <form action="">
+                <div class="input-group">
+                  <input type="text" id="search-input" class="form-control" placeholder="Search..." />
+                  <span class="input-group-addon"><i class="fa fa-search"></i></span>
+                </div>
+            </form>
+        </div>
+        <div class="pull-right btn-wrapper">
+            {% if request.user.is_authenticated %}
+
+            <div class="dropdown dropdown-button">
+                <a class="dropdown-link profile-link" href="#">
+{#                    <img src="{{ request.user.userpic.crop.70x70 }}" alt="" class="img-profile-userpic">#}
+                    <i class="fa fa-user"></i>
+                    <span class="name">{% firstof request.user.get_full_name request.user.email %}</span>
+                    <i class="fa fa-angle-down fa-fw"></i>
+                </a>
+                <div class="dropdown-content">
+
+                  <ul class="list-unstyled">
+                        <li>
+                            <a href="{% url 'account' %}"><i class="fa fa-user fa-fw"></i> {% trans "Profile" %}</a>
+                        </li>
+                        {% for organization in request.user.organization_set.all %}
+                        <li>
+                            <a href="{{ organization.get_absolute_url }}"><i class="fa fa-globe fa-fw"></i> {% trans "Company" %}</a>
+                        </li>
+                        {% endfor %}
+                        <li>
+                            <a href="{% url 'dashboard' %}"><i class="fa fa-dashboard fa-fw"></i> {% trans "Dashboard" %}</a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                             <a href="{% url 'logout' %}"> <i class="fa fa-sign-out fa-fw"></i> {% trans 'Logout' %} </a>
+                        </li>
+                  </ul>
+                </div>
+            </div>
+            {% else %}
+            <a href="{% url 'login' %}" class="btn btn-default">{% trans 'Log In' %}</a>
+            <a href="{% url 'signup' %}" class="btn btn-primary">{% trans 'Sign Up' %}</a>
+            {% endif %}
+
+            <div class="dropdown dropdown-button language-dropdown">
+                <a class="dropdown-link " href="#">
+                    <i class="fa fa-globe"></i>
+                </a>
+                <div class="dropdown-content">
+                <table class="table">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>{% trans "Language" %}</th>
+                                <th>{% trans "Country" %}</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for lang_code, lang_name in languages %}
+                                <tr>
+                                    <td>
+                                        <a href="/{{ lang_code }}{{ request.get_full_path|slice:'3:' }}">
+                                            <img src="{% static "img/flag/" %}{{ lang_code }}.png" alt="lang_name" />
+                                        </a>
+                                    </td>
+                                    <td class="text-center">
+                                        <input type="radio" name="language" class="language-radio" value="/{{ lang_code }}{{ request.get_full_path|slice:'3:' }}"
+                                               {% if LANGUAGE_CODE == lang_code %}checked{% endif %}>
+                                    </td>
+                                    <td class="text-center">
+                                        <input  class="country-radio" name="country" value="{{ lang_code }}" type="radio"/></td>
+                                    </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="dropdown dropdown-button  cart-dropdown">
+                <a class="dropdown-link profile-link" href="#">
+                    <i class="fa fa-shopping-cart fa-fw"></i> <span id="cart-total">0</span>
+                </a>
+                <div class="dropdown-content  cart-wrapper" id="market-cart"></div>
+            </div>
+            <a href="#" class="btn btn-link filters-toggler" id="sidebar-toggler">
+                <i class="fa fa-list"></i>
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}{% endblock %}
+
+{% block global-scripts %}
+    
+    <!-- React and ReactDOM should be the only globally available functions -->
+
+    <script src="{% static 'js/react/react.js' %}"></script>
+    <script src="{% static 'js/react/react-dom.js' %}"></script>
+
+<script src="{% static 'js/dropdown.js' %}"></script>
+<script src="{% static 'js/simodal.min.js' %}"></script>
+<script src="{% static 'js/store.min.js' %}"></script>
+<script src="{% static 'js/store-wrapper.js' %}"></script>
+<script src="{% static 'js/dom-helpers.js' %}"></script>
+<script>
+'use strict';
+
+new Dropdown();
+var lang_radios = document.getElementsByClassName('language-radio');
+
+Array.prototype.forEach.call(lang_radios, function(radio){
+    radio.addEventListener('change', function(event){
+        var name = this.getAttribute('name'),
+            value = this.getAttribute('value');
+        if(name == 'language')
+        {
+            window.location.href = value;
+        }
+        console.log(this.getAttribute('name'), this.getAttribute('value'))
+    })
+});
+
+function fabric() {
+    var connection = null;
+
+    function SocketConnection(options) {
+        this.options = options;
+        this.connection = connection || new WebSocket(options.url);
+        this._initEventListeners();
+    }
+
+    SocketConnection.prototype._initEventListeners = function(){
+        this.connection.onopen = this.options.onOpen.bind(this);
+        this.connection.onmessage = this.options.onMessage.bind(this);
+        this.connection.onclose = this.options.onClose.bind(this);
+    };
+
+    return SocketConnection;
+}
+
+var SocketConnection = fabric();
+var connection = new SocketConnection({
+    url: "ws://localhost:8081/websocket",
+    onOpen: function(){
+        console.log("Connection opened")
+    },
+    onClose: function(){
+        console.log("Connection closed")
+    },
+    onMessage: function(message){
+        console.log("Received a message", message)
+    }
+});
+
+</script>
+{% endblock %}
+
+{% block page-js %}{% endblock %}
+
+
+
+</body>
+</html>

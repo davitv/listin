@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container">
+        <div class="alert alert-danger">
+            <strong>{% trans "Thats an error!" %}</strong> {% trans "Your email address couldn't be confirmed!" %}
+        </div>
+    </div>
+{% endblock %}

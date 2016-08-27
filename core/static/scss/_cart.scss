@@ -1,0 +1,20 @@
+.cart {
+  &-dropdown {
+    .fa {
+      font-size: 22px;
+      vertical-align: middle;
+    }
+  }
+  &-link {
+    background-color: rgba(22, 74, 138, 0.5);
+  }
+  &-wrapper {
+    // TODO: get rid of this; !important is a bad idea
+    right: 0 !important;
+    left: auto !important;
+    width: 500px;
+  }
+  &-footer {
+    padding: 0 10px;
+  }
+}

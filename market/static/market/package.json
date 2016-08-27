@@ -1,0 +1,14 @@
+{
+  "name": "listin",
+  "version": "1.0.0",
+  "scripts": {
+    "build": "babel --watch jsx/ --out-dir js/ "
+  },
+  "devDependencies": {
+    "babel-cli": "^6.0.0",
+    "babel-preset-react": "~6.5.0"
+  },
+  "dependencies": {
+    "bower": "~1.7.7"
+  }
+}

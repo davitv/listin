@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <div class="alert alert-info">
+                <p>
+                    <strong>{% trans "Welcome!" %}</strong> {% trans "You succesfully signed up!" %}
+                    {% blocktrans %}
+                    You can go to your <a href="#" class="">company profile page</a>.
+                    {% endblocktrans %}
+                </p>
+                <p>
+                    {% blocktrans %}
+                    And don't forget to confirm your <strong>email</strong>.
+                    {% endblocktrans %}
+                </p>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

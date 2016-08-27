@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-5 hidden">
+                <div id="messaging-widget"></div>
+            </div>
+            <div class="col-sm-12">
+                <div class="widget widget-tasks">
+
+                    <div class="widget-headline">
+                        <h4 class="pull-left">
+                           <i class="fa fa-tags"></i> {% trans "Tasks" %}</h4>
+                        <div class="dropdown dropdown-button pull-right">
+                            <a class="dropdown-link btn btn-default" href="#">
+                                {% trans "Users List (current user)" %}
+                                <i class="fa fa-angle-down fa-fw"></i>
+                            </a>
+                            <div class="dropdown-content">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="widget-content">
+                        <ul class="tasks-list">
+                            {% for task in tasks %}
+                                <li>
+                                    <a href="#"><span class="label label-info">{{ task.get_priority }}</span> {{ task.name }}</a>
+                                </li>
+                            {% empty %}
+                                <div class="alert alert-info">
+                                {% trans "You haven't add any task yet." %}
+                                </div>
+                            {% endfor %}
+                        </ul>
+                    </div>
+
+                    <div class="widget-footer">
+                        <div class="gutter10"></div>
+                        <a href="#" class="btn btn-danger" id="add-task-btn">{% trans "New task" %}</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="task-form-wrapper" class="hidden">
+        <h3 class="headline">{% trans "ADD/EDIT TASK" %}
+            <a href="#" class="simodal-close pull-right"><i class="fa fa-times"></i></a>
+        </h3>
+        <form action="">{% csrf_token %}
+        {% include 'forms/task.html' %}
+            <button class="btn btn-primary">{% trans "Submit" %}</button>
+        </form>
+    </div>
+{% endblock %}
+
+{% block page-js %}
+
+    <script src="{% static 'js/aja/src/aja.js' %}"></script>
+    <script src="{% static 'js/react/react.js' %}"></script>
+    <script src="{% static 'js/react/react-dom.js' %}"></script>
+    <script src="{% static 'js/messaging-widget.js' %}"></script>
+<script>
+var messaging_wrapper = document.getElementById('messaging-widget');
+new MessagingWidget(messaging_wrapper, {
+    users_url: '/api/organizations/{{ organization.pk }}/staff/',
+    url: '/api/organizations/{{ organization.pk }}/messages/',
+    current_user: {{ request.user.pk }},
+    post_url: '/api/organizations/{{ organization.pk }}/messages/',
+    csrf_token: "{{ csrf_token }}"
+});
+
+var add_task_modal = document.getElementById('task-form-wrapper');
+var add_task_btn = document.getElementById('add-task-btn');
+add_task_btn.addEventListener('click', function(event){
+    event.preventDefault();
+    new Simodal({
+        content: add_task_modal
+    });
+    add_task_modal.className = 'modal-task-form';
+})
+</script>
+{% endblock %}

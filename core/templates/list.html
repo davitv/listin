@@ -1,0 +1,9 @@
+<ul class="list-unstyled" >
+    {% for item in items %}
+        <li><a href="#">{{ item.name }}</a>
+        {% if item.children %}
+                    {% include 'list.html' with items=item.children %}
+                    {% endif %}
+        </li>
+    {% endfor %}
+</ul>

@@ -1,0 +1,85 @@
+
+.avatar {
+  img {
+    display: block;
+    margin: 0 auto;
+    border-radius: 100%;
+  }
+}
+.profile-usertitle-name {
+  color: #5a7391;
+  font-size: 20px;
+  font-weight: 600;
+  margin-bottom: 7px;
+  text-align: center;
+}
+.profile-usertitle-job {
+  text-transform: uppercase;
+  color: #5b9bd1;
+  font-size: 13px;
+  font-weight: 800;
+  margin-bottom: 7px;
+}
+.profile-userpic-upload {
+     margin-bottom: -31px;
+    margin-right: 10px;
+    margin-top: 10px;
+}
+.form-headline {
+  padding: 0;
+  min-height: 48px;
+  border-bottom: 1px solid #eee;
+  margin-bottom: 15px;
+  .form-title {
+    float: left;
+    display: inline-block;
+    margin: 0;
+    color: #578ebe;
+    text-transform: uppercase;
+    padding: 15px 0;
+    font-size: 15px;
+    line-height: 18px;
+    font-weight: 700;
+  }
+  .nav-tabs {
+    float: right;
+    background: 0 0;
+    margin: 1px 0 0;
+    display: inline-block;
+    border: 0;
+    >li {
+      margin: 0;
+      padding: 0;
+      &.active {
+        background: 0 0;
+        border-bottom: 4px solid #36c6d3;
+        position: relative;
+        > a {
+          margin: 0;
+          background: 0 0;
+          color: #333;
+          border: 1px solid transparent;
+        }
+      }
+      &:hover {
+          background: 0 0;
+          border-bottom: 4px solid #9fe4ea;
+          > a {
+            background-color: #FDFDFD;
+          }
+      }
+      > a,
+      > a:focus {
+            margin: 0;
+            padding: 12px 13px 13px;
+            font-size: 13px;
+            color: #666;
+            border: 1px solid transparent;
+      }
+      > a:focus {
+          color: inherit;
+      }
+    }
+  }
+}
+

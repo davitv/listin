@@ -1,0 +1,563 @@
+{% extends 'base.html' %}
+{% load staticfiles i18n humanize %}
+
+{% block body-class %}grey{% endblock %}
+
+
+{% block content %}
+    <div class="row">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="widget widget-about"  id="widget-about" >
+                        <div class="img-wrapper flex-center" id="description-wrapper">
+                            <img src="{{ business.image.crop.555x238 }}" class="img-organization" alt="{{ business.name }}" />
+                            <div class="about-description">
+                                <h4>{{ business.name }}</h4>
+                                {{ business.description }}
+                            </div>
+                            {% if company_admin %}
+                            <a href="#" class="upload-button">
+                                <form action="{% url 'api-organization' %}" id="business_image_upload" enctype="multipart/form-data">{% csrf_token %}
+                                    <label for="file_input">
+                                        <i class="fa fa-image"></i> {% trans "select image" %}
+                                        <input type="file" id="file_input" name="image"/>
+                                    </label>
+                                </form>
+                            </a>
+                            {% endif %}
+                            <a href="#" class="about-description-btn" id="toggle-description">
+                                About Us
+                            </a>
+                        </div>
+                        <div class="about-text clearfix">
+                            <div class="about-contacts">
+                                <div class="row">
+                                    <div class="col-sm-5">
+                                        <p>
+                                            <i class="fa fa-envelope"></i> {{ business.email }}
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-phone"></i> {{ business.phone }}
+                                        </p>
+                                        <div class="btn-group" role="group" >
+                                          <button type="button" class="btn btn-default"> <i class="fa fa-fw fa-star"></i></button>
+                                          <button type="button" class="btn btn-default"><i class="fa fa-fw fa-envelope"></i></button>
+                                          {% if not company_admin and commercial_account %}
+                                            <button type="button" class="btn btn-default"><i class="fa fa-fw fa-video-camera"></i></button>
+                                            <button type="button" class="btn btn-default"><i class="fa fa-fw fa-user-plus"></i></button>
+                                          {% endif %}
+                                        </div>
+
+                                    </div>
+                                    <div class="col-sm-7">
+                                        <p>
+                                            <i class="fa fa-flag"></i> {{ business.country.name }},
+                                            {{ business.state }}
+                                        </p>
+                                        <p>
+                                            <i class="fa fa-map-signs"></i> {{ business.address_1 }}
+                                        </p>
+                                        {% if business.address_2 %}
+                                        <p>
+                                            <i class="fa fa-map-signs"></i> {{ business.address_2 }}
+                                        </p>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="widget widget-gallery swiper-container featured-slider">
+                        <div class="swiper-wrapper">
+                            {% for product in featured_products %}
+                            <a href="{% url 'product-details' product.pk %}" class="static-banner swiper-slide"
+                                 style="background-image: url({{ product.image.crop.600x600 }});">
+                                <h4 class="product-title">{{ product.name }}</h4>
+                            </a>
+                            {% endfor %}
+                        </div>
+                         <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+                <div class="col-sm-3">
+                    <div class="widget widget-gallery swiper-container popular-slider">
+                        <div class="swiper-wrapper">
+                            {% for product in popular_products %}
+                            <a href="{% url 'product-details' product.pk %}" class="static-banner swiper-slide"
+                                 style="background-image: url({{ product.image.crop.600x600 }});">
+                                <h4 class="product-title">{{ product.name }}</h4>
+                            </a>
+                            {% endfor %}
+                        </div>
+                         <div class="swiper-pagination"></div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="gutter20"></div>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="widget widget-tabs widget-products">
+                        <div class="clearfix">
+                            <ul class="list-inline tabs ">
+                                <li><a href="#" class="active toggler" >{% trans "Products" %}</a></li>
+                                <li><a href="#" class="toggler">{% trans "Services" %}</a></li>
+                                <li><a href="#" class="toggler">{% trans "Projects" %}</a></li>
+                            </ul>
+
+                        </div>
+
+                        <div class="tab-content active">
+                            <ul class="list-unstyled products-list">
+                                {% for product in products %}
+                                <li>
+                                    <div class="image-wrapper pull-left">
+                                        <img src="{{ product.image.crop.50x50 }}" alt="">
+                                    </div>
+                                    <div class="product-name pull-left">
+                                        {% if company_admin %}
+                                         <a href="{% url 'product-update' product.product.pk %}">{{ product.name }}
+                                         </a>
+                                        {% else %}
+                                          <a href="{% url 'product-details' product.pk %}">{{ product.name }}</a>
+                                        {% endif %}
+                                        <div class="product-price">
+                                            <span class="">
+                                                {{ product.price }} <i class="fa fa-rouble"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="controls pull-right">
+                                         <a class="btn btn-default btn-xs js-add-to-cart" href="#{{product.pk}}">
+                                            <i class="fa fa-cart-plus fa-fw"></i>
+                                         </a>
+                                        {% if company_admin %}
+                                        <a class="btn btn-danger btn-xs" href="#">
+                                                            <i class="fa fa-times fa-fw"></i>
+                                         </a>
+                                        {% endif %}
+
+                                    </div>
+                                </li>
+                                {% empty %}
+                                    <li>
+                                    <div class="alert alert-info">{% trans "There is no product in this list" %}</div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+
+                        <div class="tab-content">
+                            <ul class="list-unstyled products-list">
+                                {% for product in services %}
+                                <li>
+                                    <div class="image-wrapper pull-left">
+                                        <img src="{{ product.image.crop.50x50 }}" alt="">
+                                    </div>
+                                    <div class="product-name pull-left">
+                                        {% if company_admin %}
+                                         <a href="{% url 'product-update' product.product.pk %}">{{ product.name }}
+                                         </a>
+                                        {% else %}
+                                          <a href="{% url 'product-details' product.pk %}">{{ product.name }}</a>
+                                        {% endif %}
+                                        <div class="product-price">
+                                            <span class="">
+                                                {{ product.price }} <i class="fa fa-rouble"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="controls pull-right">
+                                         <a class="btn btn-default btn-xs js-add-to-cart" href="#{{product.pk}}">
+                                            <i class="fa fa-cart-plus fa-fw"></i>
+                                         </a>
+                                         <a class="btn btn-danger btn-xs" href="#">
+                                                            <i class="fa fa-times fa-fw"></i>
+                                         </a>
+                                    </div>
+                                </li>
+                                {% empty %}
+                                    <li>
+                                    <div class="alert alert-info">{% trans "There is no product in this list" %}</div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+
+                            <ul class="list-unstyled products-list">
+                                {% for product in projects %}
+                                <li>
+                                    <div class="image-wrapper pull-left">
+                                        <img src="{{ product.image.crop.50x50 }}" alt="">
+                                    </div>
+                                    <div class="product-name pull-left">
+                                        {% if company_admin %}
+                                         <a href="{% url 'product-update' product.product.pk %}">{{ product.name }}
+                                         </a>
+                                        {% else %}
+                                          <a href="{% url 'product-details' product.pk %}">{{ product.name }}</a>
+                                        {% endif %}
+                                        <div class="product-price">
+                                            <span class="">
+                                                {{ product.price }} <i class="fa fa-rouble"></i>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="controls pull-right">
+                                         <a class="btn btn-default btn-xs js-add-to-cart" href="#{{product.pk}}">
+                                               <i class="fa fa-cart-plus fa-fw"></i>
+                                         </a>
+                                         <a class="btn btn-danger btn-xs" href="#">
+                                                            <i class="fa fa-times fa-fw"></i>
+                                         </a>
+                                    </div>
+                                </li>
+                                {% empty %}
+                                    <li>
+                                    <div class="alert alert-info">{% trans "There is no product in this list" %}</div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% if company_admin %}
+                        <div class="widget-footer">
+                                <a href="{% url 'product-add' %}" class="btn btn-primary btn-xs" >
+                                 <i class="fa fa-plus"></i> {% trans "ADD" %} </a>
+                        </div>
+                    {% endif %}
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="widget widget-tabs widget-branches">
+                        <div class="clearfix">
+                            <ul class="list-inline tabs">
+                                <li><a href="{% url 'staff-add' %}" class="toggler active">{% trans "Staff" %}</a></li>
+                                <li><a href="{% url 'branch-add' business.pk %}" class="toggler">{% trans "Branches" %}</a></li>
+                                <li><a href="#" class="toggler">{% trans "Partners" %}</a></li>
+                                <li><a href="{% url 'vacancy-add' %}" class="toggler">{% trans "Vacancies" %}</a></li>
+                            </ul>
+                        </div>
+                        <div class="tab-content active">
+                            <ul class="list-unstyled products-list">
+                                {% for user in staff %}
+                                <li>
+                                    <div class="image-wrapper pull-left">
+                                        <img src="{{ user.userpic.crop.50x50 }}" alt="">
+                                    </div>
+                                    <div class="product-name pull-left">
+                                        <a href="{% url 'staff-update' user.pk %}">{{ user.get_full_name }}</a>
+                                    </div>
+                                    <div class="controls pull-right">
+                                         <a class="btn btn-default btn-xs" href="mailto:{{ user.email }}">
+                                              <i class="fa fa-envelope fa-fw"></i>
+                                         </a>
+                                         <a class="btn btn-default btn-xs" href="#">
+                                                            <i class="fa fa-phone fa-fw"></i>
+                                         </a>
+                                    </div>
+                                </li>
+                                {% empty %}
+                                    <li>
+                                    <div class="alert alert-info">{% trans "There is no product in this list" %}</div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="tab-content">
+                            <ul class="list-unstyled products-list">
+                                {% for branch in organization.branch_set.all %}
+                                <li>
+                                    <div class="image-wrapper pull-left">
+                                        <img src="{{ branch.image.crop.50x50 }}" alt="">
+                                    </div>
+                                    <div class="product-name pull-left">
+                                        <a href="{% url 'branch-update' organization.pk branch.pk %}">{{ branch.name }}
+                                            ({{ branch.country.name }})
+                                        </a>
+                                    </div>
+                                    <div class="controls pull-right">
+
+                                    </div>
+                                </li>
+                                {% empty %}
+                                <li>
+                                    <div class="alert alert-info">{% trans "There is no branches in this list" %}</div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        <div class="tab-content"  id="partners" >
+                        </div>
+                        <div class="tab-content">
+                            <ul class="list-unstyled products-list">
+                                {% for vacancy in business.vacancies.all %}
+                                <li>
+                                    <div class="product-name pull-left">
+                                        <a href="{% url 'vacancy-edit' vacancy.pk %}">{{ vacancy.name }}</a>
+                                    </div>
+                                    <div class="controls pull-right">
+
+                                    </div>
+                                </li>
+                                {% empty %}
+                                <li>
+                                    <div class="alert alert-info">{% trans "There is no vacanies" %}</div>
+                                </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                        {% if company_admin %}
+                            <div class="widget-footer">
+                                    <a href="#" class="btn btn-primary btn-xs " id="btn-widget-branches">
+                                        <i class="fa fa-plus"></i>
+                                        ADD
+                                    </a>
+                                    <a href="{% url 'vacancy-add' %}" class="btn pull-right btn-primary btn-xs">
+                                        <i class="fa fa-user-plus"></i>
+                                        {% trans "New Vacancy" %}
+                                    </a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+            </div>
+            <div class="gutter20"></div>
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="widget widget-tabs comments-tabs">
+                        <div class="clearfix">
+                            <ul class="list-inline tabs">
+                                <li><a href="#" class="active toggler" >{% trans "Comments" %}</a></li>
+                                <li><a href="#" class="toggler">{% trans "Messages" %}</a></li>
+                                <li><a href="#" class="toggler">{% trans "Rating" %}</a></li>
+                            </ul>
+                        </div>
+
+                        <div class="tab-content active">
+                            <div  id="widget-comments"></div>
+                        </div>
+                        <div class="tab-content ">
+                            <div class="visitor-messages">
+                                {% for message in organization.visitormessage_set.all %}
+                                    <div class="comment">
+                                        <div class="comment-text">
+                                            <span class="arrow" ></span>
+                                            <div class="author">
+                                                <a href="#" class="author" >{{ message.sender_name|default_if_none:'' }}</a>
+                                                <small class="datetime" ><i class="fa fa-clock-o" ></i>
+                                                    {{ message.created_at|naturaltime }}</small>
+                                            </div>
+                                            <p class="comment-p">
+                                                {{ message.text }}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                {% empty %}
+                                    <div class="alert alert-info">{% trans "No messages yet..." %}</div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <div class="tab-content" id="rating-widget"></div>
+                    </div>
+                </div>
+
+
+                <div class="col-md-8">
+                    <div id="container" class="widget-chart" style="width:100%; height:490px;"></div>
+                </div>
+            </div>
+            <div class="gutter20"></div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="widget widget-map">
+                        <div class="widget-headline">
+                            <h4>{% trans 'Branches map' %}</h4>
+                        </div>
+                        <div class="map-wrapper">
+                            <div id="branches-map" style="width: 100%; height: 400px"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="gutter20"></div>
+            {% if admin %}
+            <form action="" id="widget-about-form" class="hidden">{% csrf_token %}
+                    <input type="text" id="widget_html" value="" name="html">
+            </form>
+            {% endif %}
+        </div>
+    </div>
+
+{% endblock %}
+
+{% block page-css %}{% endblock %}
+{% block page-js %}
+    <script src="http://code.highcharts.com/highcharts.js"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+
+    <script src="{% static 'js/tabs.js' %}"></script>
+    <script src="{% static 'js/swiper.min.js' %}"></script>
+    <script src="{% static 'js/eventEmitter/EventEmitter.min.js' %}"></script>
+    <script src="{% static 'js/moment-with-locales.min.js' %}"></script>
+    <script src="{% static 'js/aja/aja.min.js' %}"></script>
+    <script src="{% static 'js/comments-widget.js' %}"></script>
+    <script src="{% static 'js/homepage-widget.js' %}"></script>
+    <script src="{% static 'js/rating-widget.js' %}"></script>
+    <script src="{% static 'js_dist/cart.js' %}"></script>
+    <script>
+(function(){
+    moment.locale('ru');
+    ymaps.ready(init);
+    var branches_map;
+    function init(){
+        branches_map = new ymaps.Map ("branches-map", {
+            center: [55.76, 37.64],
+            zoom: 7
+        });
+        {% for branch in organization.branch_set.all %}
+            (function(address){
+                var gcoder = ymaps.geocode(address);
+                gcoder.then(
+                    function (res) {
+                        branches_map.geoObjects.add(res.geoObjects);
+                    },
+                    function (err) {
+                        console.error(err)
+                    }
+                );
+            })("{{ branch.full_address }}");
+        {% endfor %}
+    }
+
+    var description_toggler = document.getElementById('toggle-description');
+    var description_wrapper = document.getElementById('description-wrapper');
+    description_toggler.addEventListener('click', function(event){
+       event.preventDefault();
+       description_wrapper.classList.contains('open') ? description_wrapper.classList.remove('open') :
+               description_wrapper.classList.add('open');
+    });
+
+    new HomepageWidget(document.getElementById("partners"),
+        {
+            // list global business data
+            url: '{% url "api-partners-list" organization.pk %}',
+            is_favorite: false,
+            showCategories: false,
+
+            // https://www.squarefree.com/securitytips/web-developers.html#CSRF
+            csrf_token: "{{ csrf_token }}"
+        }
+    );
+
+    // Initializing customer comments widget
+    CommentsWidget(
+            document.getElementById("widget-comments"),
+            {
+                // url for list/create comments data
+                url: "{% url 'api-comments' %}",
+                organization_id: {{ organization.pk }},
+                is_authed: true,
+                // https://www.squarefree.com/securitytips/web-developers.html#CSRF
+                csrf_token: "{{ csrf_token }}"
+            }
+    );
+
+    var tabs =  new Tabs(document.getElementsByClassName('widget-tabs')[0]);
+    var tabs2 =  new Tabs(document.getElementsByClassName('comments-tabs')[0]);
+    var tabs3 =  new Tabs(document.getElementsByClassName('widget-branches')[0]);
+    var btn_widget_branches = document.getElementById('btn-widget-branches');
+
+    !!btn_widget_branches && btn_widget_branches.addEventListener('click', function(event){
+        this.setAttribute('href', tabs3.getActiveToggler().getAttribute('href'));
+    });
+
+    new Highcharts.Chart({
+        chart: {
+            renderTo: 'container'
+        },
+        title: {
+            text: "{% trans "Company growth" %}"
+        },
+        xAxis: {
+            type: 'datetime'
+        },
+
+        series: [{
+            data: [],
+            pointStart: Date.UTC(2013, 0, 1),
+            pointInterval: 3600 * 1000 * 24 * 30 // one month
+        }]
+    });
+    window.onload = function(){
+        new Swiper ('.featured-slider', {
+            // Optional parameters
+            loop: true,
+            autoplay: 3000,
+            // If we need pagination
+            pagination: '.swiper-pagination'
+        });
+        new Swiper ('.popular-slider', {
+            // Optional parameters
+            loop: true,
+            autoplay: 2000,
+            // If we need pagination
+            pagination: '.swiper-pagination'
+        });
+    };
+
+    function sendForm(form, callback) {
+        var formData = new FormData(form);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", form.getAttribute("action"));
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.onreadystatechange = function() { // (3)
+          if (xhr.readyState != 4) return;
+          if (xhr.status != 200) {
+              console.log(JSON.parse(xhr.responseText));
+              var data = JSON.parse(xhr.responseText);
+              showErrors(form, data)
+          } else {
+              callback && callback(JSON.parse(xhr.responseText))
+          }
+        };
+        xhr.send(formData);
+    }
+
+     var image_form = document.getElementById('business_image_upload');
+     var image_file = document.getElementById("file_input");
+     !!image_file && image_file.addEventListener("change", function(event){
+        sendForm(image_form, function(res){
+            var imgs_organization = document.getElementsByClassName('img-organization');
+            for(var i = 0, l = imgs_organization.length; i < l; i++)
+            {
+                imgs_organization[i].setAttribute('src', res.image.medium_square_crop);
+            }
+        });
+     });
+
+
+    new RatingWidget(
+        document.getElementById('rating-widget'),
+        {
+            retrieve_url: "{% url "api-rating" organization.pk %}",
+            vote_url: "{% url "api-rating" organization.pk %}",
+            csrf_token: "{{ csrf_token }}",
+            social_urls: {
+              fb: "{% url 'social:begin' 'facebook' %}?next={% url 'organization-view' organization.pk %}",
+              vk: "{% url 'social:begin' 'vk-oauth2' %}?next={% url 'organization-view' organization.pk %}",
+              gp: "{% url 'social:begin' 'google-plus' %}?next={% url 'organization-view' organization.pk %}"
+            },
+            is_authenticated: {% if request.user.is_authenticated %}true{% else %}false{% endif %}
+        }
+    )
+})();
+</script>
+{% endblock %}
+
+

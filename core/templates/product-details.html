@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% load staticfiles i18n %}
+{% block content %}
+<div class="col-md-8 col-md-offset-2">
+   <form action="{% url 'api-products-list' %}" method="POST" enctype="multipart/form-data" id="product-form"> {% csrf_token %}
+        <div class="form-widget">
+            <div class="headline">
+                <h3>
+
+                        {% if object.kind == 1 %}
+                            <span class="label label-default">{% trans "service" %}</span>
+                        {% endif %}
+
+                        {% if object.kind == 2 %}
+                            <span class="label label-default">{% trans "project" %}</span>
+                        {% endif %} <small>{{ object.organization.name }} / {{ object.category.name }} / </small>
+                </h3>
+            </div>
+            <div class="caption">
+                <div class="row">
+                    <div class="col-md-4">
+                        <img src="{{ object.image.crop.1000x1000 }}" alt="{{ object.name }}" class="img-responsive" />
+                    </div>
+                    <div class="col-md-8">
+                        <h3>{{ object.name }}</h3>
+                        <h4>{{ object.price }} Р.</h4>
+
+                        {% if object.is_popular %}
+                            <span class="label label-info">{% trans "Bestseller" %}</span>
+                        {% endif %}
+
+                        {% if object.is_featured %}
+                            <span class="label label-info">{% trans "Recommended" %}</span>
+                        {% endif %}
+
+                        <p class="product-description">
+                            {{ object.description }}
+                        </p>
+
+                    </div>
+                </div>
+
+
+            </div>
+            <div class="widget-footer">
+
+                <button class="btn btn-primary">{% trans "Add to cart" %}</button>
+            </div>
+        </div>
+   </form>
+</div>
+{% endblock %}
+
+{% block page-js %}
+<script>
+(function(){
+
+
+})()
+</script>
+{% endblock %}

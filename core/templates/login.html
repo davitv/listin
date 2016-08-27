@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-4 col-md-offset-4">
+            <form action="" method="POST" id="login-form"> {% csrf_token %}
+                <div class="form-widget">
+                    <div class="headline">
+                        <h3>{% trans "LOGIN FORM" %}</h3>
+                    </div>
+                    <div class="caption">
+                        <div class="form-group {% if form.username.errors %}has-error{% endif %}">
+                            <label class="control-label">{% trans "Email Address" %}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-envelope fa-fw"></i>
+                                </span>
+                                <input type="text" id="input-username" value="{{ form.username.value|default_if_none:'' }}" name="{{ form.username.html_name }}" class="form-control" placeholder="{% trans "Type your email" %}"> </div>
+                                {% if form.username.errors %}
+                                    <span class="help-block">{{ form.username.errors.as_text }}</span>
+                                {% endif %}
+                        </div>
+                        <div class="form-group {% if form.password.errors %}has-error{% endif %}">
+                            <label class="control-label">{% trans "Password" %}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i class="fa fa-lock fa-fw"></i></span>
+                                <input id="input-password"  value="{{ form.password.value|default_if_none:'' }}"
+                                       type="password" name="password"  class="form-control" placeholder="{% trans "Your password, please" %}"> </div>
+                            {% if form.password.errors %}
+                                <span class="help-block">{{ form.password.errors.as_text }}</span>
+                            {% endif %}
+                        </div>
+                        {% if form.non_field_errors %}
+                        <div class="alert alert-danger">
+                            {{ form.non_field_errors.as_text }}
+                        </div>
+                        {% endif %}
+                    </div>
+                    <div class="widget-footer">
+                        <button class="btn btn-primary" id="login-submit" >{% trans "Submit" %}</button>
+                        <a href="{% url 'password-reset' %}" class="btn btn-link">{% trans "i forgot my password" %}</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock %}

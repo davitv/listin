@@ -1,0 +1,100 @@
+{% extends 'base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="gutter20"></div>
+<div class="col-md-8 col-md-offset-2">
+<div class="form-widget">
+    <div class="form-headline">
+        <span class="form-title">{% trans "Add new vacancy" %}</span>
+    </div>
+    <div class="widget-content">
+        <div id="vacancy-form"></div>
+    </div>
+</div>
+</div>
+{% endblock %}
+  <div class="alert-wrapper"></div>
+{% block page-js %}
+    <script src="{% static 'js/react/react.js' %}"></script>
+    <script src="{% static 'js/react/react-dom.js' %}"></script>
+    <script src="{% static 'js/aja/aja.min.js' %}"></script>
+    <script src="{% static 'js/vacancy-widget.js' %}"></script>
+<script>
+
+function ListInput(element) {
+    this.element = element;
+    this.addBtn = element.getElementsByClassName("add-value")[0];
+    this.rmBtns = element.getElementsByClassName("remove-value");
+    this.listWrapper = element.getElementsByClassName("list-wrapper")[0];
+    this.input = element.getElementsByClassName("form-control")[0];
+    this.htmlName = this.input.getAttribute('name');
+    this.init();
+}
+ListInput.prototype.init = function(){
+    var _this = this;
+    this.addBtn.addEventListener('click', function(event){
+        event.preventDefault();
+        _this.appendValue(event.target);
+    });
+    Array.prototype.forEach.call(this.rmBtns, function(btn){
+        btn.addEventListener('click', function(event){
+            event.preventDefault();
+            this.parentNode.parentNode.remove();
+        });
+    });
+};
+
+ListInput.prototype.appendValue = function(target){
+    var value = this.input.value;
+    if(!value.trim()) return;
+    var elem = document.createElement('div');
+    elem.innerHTML = '<div class="input-group"> \
+                      <div  class="form-control" >'+value+'</div>\
+                      <input  type="hidden" class="hidden-value" name="'+this.htmlName+'" value="'+value+'" >\
+                      <span class="input-group-btn"> \
+                        <button class="btn btn-default remove-value" type="button"> \
+                            <i class="fa fa-times"></i> \
+                        </button> \
+                      </span> \
+                    </div>';
+    elem.addEventListener('click', function(event){
+        if(event.target.classList.contains('remove-value') || event.target.parentNode.classList.contains('remove-value'))
+        {
+            this.remove();
+        }
+    });
+    this.listWrapper.appendChild(elem);
+    this.input.value = '';
+};
+
+ListInput.prototype.getValuesConcatenated = function(target){
+    Array.prototype.forEach.call(
+            this.element.getElementsByClassName('hidden-value'),
+            function(elem){
+                console.log(elem)
+            }
+    )
+};
+
+var list_inputs = document.getElementsByClassName('list-input');
+for(var i = 0, l = list_inputs.length; i < l; i++)
+{
+    new ListInput(list_inputs[i]);
+}
+
+var vacancy_form = document.getElementById('vacancy-form');
+vacancy_form.addEventListener('submit', function(event){
+    event.preventDefault();
+});
+
+var form = new VacancyFormWidget(document.getElementById('vacancy-form'),
+        {
+            organization: {{ organization.pk }},
+            get_url: {% if object %}"{% url 'api-vacancies-update' object.pk %}"{% else %}0{% endif %},
+            post_url: {% if object %}"{% url 'api-vacancies-update' object.pk %}"{% else %}"{% url 'api-vacanacies-list' %}"{% endif %},
+            csrf_token: "{{ csrf_token }}"
+        });
+
+</script>
+{% endblock %}

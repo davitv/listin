@@ -1,0 +1,133 @@
+{% load i18n staticfiles %}
+{% csrf_token %}
+
+<div class="form-group {% if form.name.errors %}has-error{% endif %}">
+        <label class="control-label">{% trans "Name" %}</label>
+        <div class="input-group">
+            <span class="input-group-addon">
+                <i class="fa fa-edit fa-fw"></i>
+            </span>
+            <input type="text" value="{{ form.name.value|default_if_none:'' }}"
+                   name="name"
+                   class="form-control input_name"
+                   placeholder="{% trans "Enter your company branch name" %}"> </div>
+</div>
+<hr />
+<div class="form-group {% if form.email.errors %}has-error{% endif %}">
+    <label class="control-label">{% trans "Contact Email" %}</label>
+    <div class="input-group">
+        <span class="input-group-addon">
+            <i class="fa fa-envelope fa-fw"></i>
+        </span>
+        <input type="text" value="{{ form.email.value|default_if_none:'' }}"
+               name="email"
+               class="form-control input_email"
+               placeholder="{% trans "How can user contact you?" %}"> </div>
+</div>
+
+<div class="form-group {% if form.phone.errors %}has-error{% endif %}">
+    <label class="control-label">{% trans "Phone Number" %}</label>
+    <div class="input-group">
+        <span class="input-group-addon">
+            <i class="fa fa-phone fa-fw"></i>
+        </span>
+        <input type="text" value="{{ form.phone.value|default_if_none:'' }}"
+               name="phone" class="form-control input_phone"
+               placeholder="{% trans "You need them to call you, right?" %}"> </div>
+</div>
+<hr />
+
+<div class="row">
+    <div class="col-sm-4">
+       <div class="form-group {% if form.country.errors %}has-error{% endif %}">
+            <label class="control-label">{% trans "Country" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-flag fa-fw"></i>
+                </span>
+                {{ form.country }}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+       <div class="form-group {% if form.state.errors %}has-error{% endif %}">
+            <label class="control-label">{% trans "State/Region" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-flag fa-fw"></i>
+                </span>
+                <input type="text" value="{{ form.state.value|default_if_none:'' }}"
+                       name="{{ form.state.html_name }}" class="form-control input_{{ form.state.html_name }}"
+                       placeholder="{% trans "Type the state" %}">
+            </div>
+            </div>
+    </div>
+    <div class="col-sm-4">
+       <div class="form-group">
+            <label class="control-label">{% trans "City" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-flag fa-fw"></i>
+                </span>
+                <input type="text" value="{{ form.city.value|default_if_none:'' }}"
+                       name="city" class="form-control input_city"
+                       placeholder="{% trans "Type the city" %}">
+            </div>
+            </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group {% if form.address_1.errors %}has-error{% endif %}">
+            <label class="control-label">{% trans "Address line 1" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-map-signs fa-fw"></i>
+                </span>
+
+                <input type="text" value="{{ form.address_1.value|default_if_none:'' }}"
+                       name="{{ form.address_1.html_name }}" class="form-control input_{{ form.state.html_name }}"
+                       placeholder="{% trans "Type your address" %}">
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group {% if form.address_2.errors %}has-error{% endif %}">
+            <label class="control-label">{% trans "Address line 2" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-map-signs fa-fw"></i>
+                </span>
+
+                <input type="text" value="{{ form.address_2.value|default_if_none:'' }}"
+                       name="{{ form.address_2.html_name }}" class="form-control input_{{ form.state.html_name }}"
+                       placeholder="{% trans "Type your address" %}">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="form-group {% if form.description.errors %}has-error{% endif %}">
+    <label class="control-label">{% trans "Branch description" %}</label>
+    <div class="input-group">
+        <span class="input-group-addon">
+            <i class="fa fa-file-text fa-fw"></i>
+        </span>
+
+        <textarea name="{{ form.description.html_name }}" class="form-control input_{{ form.description.html_name }}"
+               placeholder="{% trans "Write about your company branch" %}">{{ form.description.value|default_if_none:'' }}</textarea>
+    </div>
+</div>
+<input type="hidden" name="organization" value="{{ organization.pk }}"/>
+{% if form.non_field_errors %}
+<div class="alert alert-danger">
+    {{ form.non_field_errors.as_text }}
+</div>
+{% endif %}
+<div class="alert-wrapper"></div>
+<input type="hidden" value="{{ branch.pk }}" name="branch" />
+<button class="btn btn-primary btn-submit"
+        data-loading="{% trans "Saving" %}" type="submit">
+    <i class="fa fa-check"></i> {% trans "Save Changes" %}</button>

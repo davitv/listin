@@ -1,0 +1,317 @@
+{% extends 'base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+
+{% if new_account %}
+    <div class="alert alert-info">
+        <strong>{% trans "Confirmation email was sent." %}</strong>
+        {% trans "Please, check your registered mail inbox." %}
+    </div>
+{% endif %}
+{% if business_needed %}
+<div class="steps">
+    <div class="col-sm-3 widget step-widget active">
+            <div class="step-number">1</div>
+            <div class="step-content">
+                <h3>{% trans "Welcome!" %}</h3>
+                <p>{% trans "Please, fill info belo!" %}</p>
+            </div>
+    </div>
+
+    <div class="col-sm-3 widget step-widget first">
+            <div class="step-number">2</div>
+            <div class="step-content">
+                <h3>{% trans "Payment" %}</h3>
+                <p>{% trans "Make sure you can pay!" %}</p>
+            </div>
+    </div>
+
+    <div class="col-sm-3 widget step-widget first">
+            <div class="step-number">3</div>
+            <div class="step-content">
+                <h3>{% trans "Company " %}</h3>
+                <p>{% trans "Business information" %}</p>
+            </div>
+    </div>
+
+    <div class="col-sm-3 widget step-widget first">
+            <div class="step-number">4</div>
+            <div class="step-content">
+                <h3>{% trans "Ready to go!" %}</h3>
+                <p>{% trans "Go ahead, change the world" %}</p>
+            </div>
+    </div>
+</div>
+{% endif %}
+
+<div class="row">
+  <div class="col-md-3">
+        <div class="">
+                <a href="#" class="btn btn-default btn-xs pull-right profile-userpic-upload" id="userpic-dropzone">
+                    <i class="fa fa-photo"></i> {% trans "select" %}</a>
+        </div>
+        <div class="form-widget">
+
+            <div class="avatar">
+                <img src="{{ user.userpic.crop.150x150 }}" class="img-profile-userpic" alt="{{ user.get_full_name }}">
+            </div>
+
+            <div class="profile-info">
+                <h3 class="profile-usertitle-name">{{ user.get_full_name }}</h3>
+                <h4 class="profile-usertitle-job text-center">{{ business.name }}</h4>
+            </div>
+
+        </div>
+  </div>
+  <div class="col-md-9">
+      <div class="form-widget">
+          <div class="form-headline">
+            <span class="form-title">{% trans "Profile Information" %}</span>
+            <ul class="nav nav-tabs" data-switch="account-tabs" id="account-tabs-swicher">
+                <li class="active toggler">
+                    <a href="#personal-info" data-toggle="tab" aria-expanded="true">{% trans "Personal" %} </a>
+                </li>
+                <li class="toggler">
+                    <a href="#business-info" data-toggle="tab" aria-expanded="false">
+                        {% trans "Business" %}
+                    </a>
+                </li>
+                <li class="toggler">
+                    <a href="#change-password" data-toggle="tab">{% trans "CV Form" %}</a>
+                </li>
+            </ul>
+          </div>
+          <div class="widget-content">
+              <div id="account-tabs">
+                <div class="tab-content open">
+                    <form action="" method="POST" id="profile-form">
+                        {% include 'forms/account.html' with form=form %}
+
+                        <div class="clearfix">
+                            <button class="btn btn-primary btn-submit"
+                                data-loading="{% trans "Saving" %}" type="submit">
+                            {% trans "Save" %}</button>
+                            <div class="pull-right">
+                                <a href="#" class="btn btn-default" id="change-password-link">
+                                <i class="fa fa-lock"></i> {% trans "Change Password" %}</a>
+
+                                <a href="{% url "password-reset" %}" class="btn btn-link" id="change-password-link">
+                                    <i class="fa fa-unlock"></i> {% trans "Reset password" %}</a>
+                            </div>
+
+                        </div>
+                    </form>
+                </div>
+                <div class="tab-content">
+                    <form action="{% url 'api-organization' %}" method="POST" id="organization-form">
+                        {% include 'forms/organization.html' with form=organization_form %}
+                    </form>
+                </div>
+                <div class="tab-content">
+                    <form action="{% url 'organization-add' %}" method="POST" id="organization-form">
+                        {% include 'forms/cv-account.html' with form=cv_form %}
+                        <button class="btn btn-primary">Save</button>
+                    </form>
+                </div>
+            </div>
+          </div>
+      </div>
+
+  </div>
+
+</div>
+</div>
+    <div class="hidden">
+        <form action="{% url 'new-password' %}" method="POST" id="password-form">
+            {% include 'forms/password-new.html' with form=new_password_form %}
+            <div class="clearfix">
+                <button class="btn btn-primary">{% trans 'Change password' %}</button>
+                <a href="#" class="btn btn-default simodal-close pull-right">Cancel</a>
+            </div>
+        </form>
+    </div>
+{% endblock %}
+{% block page-js %}
+<script src="{% static 'js/alert.js' %}"></script>
+<script src="{% static 'js/switcher.js' %}"></script>
+<script src="{% static 'js/dropzone.js' %}"></script>
+<script src="{% static 'js/aja/aja.min.js' %}"></script>
+
+<script>
+    Dropzone.autoDiscover = false;
+    var userpicDropzone = new Dropzone("#userpic-dropzone",
+            {
+                url: "{% url 'api-tempfile' %}",
+                previewTemplate: '<div></div>',
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            }
+    );
+    userpicDropzone.on("addedfile", function(file) { });
+    userpicDropzone.on("success", function(file, res) {
+        aja().url('{% url 'api-profile' %}')
+                .header('X-Requested-With', 'XMLHttpRequest')
+            .data({
+                userpic_url: res.results[0].name,
+                csrfmiddlewaretoken: "{{ csrf_token }}"
+            }).method("POST").on('success', function(res){
+                console.log(res);
+                var img_userpics = document.getElementsByClassName('img-profile-userpic');
+                for(var i = 0, l = img_userpics.length; i < l; i++)
+                {
+                    img_userpics[i].setAttribute('src', res.userpic.thumbnail);
+                }
+            }).go();
+     });
+    var organizationLogoDropzone = new Dropzone("#organization-dropzone",
+            {
+                url: "{% url 'api-tempfile' %}",
+                previewTemplate: '<div></div>',
+                headers: {
+                    "X-CSRFToken": "{{ csrf_token }}"
+                }
+            }
+    );
+    organizationLogoDropzone.on("addedfile", function(file) { });
+    organizationLogoDropzone.on("success", function(file, res) {
+        document.getElementById('logo-temp-path').value = res.results[0].name;
+        document.getElementById('organization-logo-preview').setAttribute('src', res.results[0].url)
+    });
+
+    function formGroupError(form_group, message)
+    {
+        form_group.classList.add("has-error");
+        var help_block = form_group.getElementsByClassName("help-block");
+        if(help_block.length)
+        {
+            help_block[0].innerHTML =message;
+        }
+    }
+
+    function cleanInputError(event_or_input)
+    {
+        var input = !!event_or_input.target ? event_or_input.target : event_or_input;
+        var form_group = input.parentNode.classList.contains('form-group') ?
+                    input.parentNode :
+                    input.parentNode.parentNode;
+
+        form_group.classList.remove("has-error");
+        var help_block = form_group.getElementsByClassName("help-block");
+        if(help_block.length)
+        {
+            help_block[0].innerHTML = "";
+        }
+        if(event_or_input.target)
+        {
+            this.removeEventListener('keyup', cleanInputError)
+        }
+    }
+
+    function cleanFormErrors(form)
+    {
+        var inputs = form.getElementsByClassName("form-control");
+        for(var i = 0, l = inputs.length; i < l; i++)
+        {
+            var input = inputs[i];
+            cleanInputError(input);
+        }
+    }
+
+    function showFormErrors(form, data)
+    {
+        var inputs = form.getElementsByClassName("form-control");
+        for(var i = 0, l = inputs.length; i < l; i++)
+        {
+            var name = inputs[i].name,
+                input = inputs[i];
+            if(data.hasOwnProperty(name))
+            {
+                var parent = input.parentNode.classList.contains('form-group') ?
+                        input.parentNode :
+                        input.parentNode.parentNode;
+                formGroupError(parent, data[name]);
+                input.addEventListener('keyup', cleanInputError);
+            }
+        }
+    }
+
+    function sendForm(form, callback) {
+        var formData = new FormData(form);
+        var xhr = new XMLHttpRequest();
+        xhr.open("POST", form.getAttribute("action"));
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        xhr.onreadystatechange = function() { // (3)
+          if (xhr.readyState != 4) return;
+          if (xhr.status != 200) {
+              var data = JSON.parse(xhr.responseText);
+              showFormErrors(form, data)
+          } else {
+              callback && callback.call(form, xhr.responseText);
+          }
+        };
+        xhr.send(formData);
+    }
+    function cleanForm(form){
+        var inputs = form.getElementsByClassName("form-control");
+        for(var i = 0, l = inputs.length; i < l; i++)
+        {
+            if(inputs[i].value) inputs[i].value = "";
+        }
+    }
+    var account_switcher = document.getElementById('account-tabs-swicher');
+    var account_tabs = document.getElementById('account-tabs');
+    new Switcher(account_switcher, account_tabs);
+
+    var organization_form = document.getElementById("organization-form");
+    organization_form.addEventListener('submit', function(event){
+        event.preventDefault();
+        sendForm(this, function(response){
+            new Alert(this, {
+                text: "{% trans "Organization info has been saved" %}"
+            })
+        });
+    });
+
+    var password_link = document.getElementById("change-password-link");
+    var password_form = document.getElementById("password-form");
+    var password_modal = null;
+    password_link.addEventListener('click', function(event){
+        event.preventDefault();
+        if(password_modal)
+        {
+            password_modal.show();
+        }
+        else
+        {
+            password_modal = new Simodal({
+                content: password_form,
+                modalClass: "simodal modal-password"
+            });
+        }
+    });
+
+    password_form.addEventListener('submit', function(event){
+        event.preventDefault();
+        sendForm(this, function(){
+            new Alert(this, {
+                text: "{% trans "New password has been set" %}"
+            });
+            cleanForm(this);
+        });
+    });
+
+    var profile_form = document.getElementById("profile-form");
+    profile_form.addEventListener('submit', function(event){
+        event.preventDefault();
+        sendForm(this, function(){
+            new Alert(this, {
+                text: "{% trans "Profile info saved" %}"
+            })
+        });
+    });
+
+</script>
+{% endblock %}

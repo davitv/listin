@@ -1,0 +1,81 @@
+
+.upload-component {
+  display: block;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  box-sizing: border-box;
+  position: relative;
+  border: solid 1px #ccc;
+
+
+  > input[type=file]{
+    opacity: 0;
+    display: none;
+    position: absolute;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+  }
+  &.upload-component-image {
+    min-height: 200px;
+    background-color: #F0F0F0;
+
+    .upload-component-caption {
+      @include clearfix;
+      position: absolute;
+
+      top: 0;
+      left: 0;
+      display: block;
+      width: 100%;
+      padding: 7px;
+      background: rgba(0, 0, 0, 0.42)
+    }
+
+    .upload-component-preview {
+      display: flex;
+      -webkit-box-align: center;
+      -webkit-box-pack: center;
+      justify-content: center;
+      width: 100%;
+      position: relative;
+      vertical-align: middle;
+      text-align: center;
+      height: 200px;
+    }
+    .upload-component-image {
+      max-width: 100%;
+      max-height: 100%;
+      display: block;
+      margin: auto;
+    }
+  }
+
+  .upload-component-btn {
+    display: inline-block;
+    border: solid 1px #ccc;
+    padding: 2px 7px;
+    color: #fff;
+    text-decoration: none;
+    &:hover,
+    &:active {
+      background-color: #000;
+    }
+  }
+
+  .upload-component-preview-caption {
+     margin: auto;
+    cursor: pointer;
+    border: solid 1px #C7C7C7;
+    padding: 7px 14px;
+  }
+
+  .upload-component-right {
+    float: right;
+  }
+
+  .upload-component-left {
+    float: left;
+  }
+}

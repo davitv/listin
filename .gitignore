@@ -1,0 +1,8 @@
+/.vagrant
+/static
+*.pyc
+/listin/settings/local.py
+/media
+__pycache__
+node_modules
+.sass-cache

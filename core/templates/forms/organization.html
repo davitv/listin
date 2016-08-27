@@ -1,0 +1,212 @@
+{% load i18n staticfiles %}
+{% csrf_token %}
+
+<div class="form-group">
+        <label class="control-label">{% trans "Name" %}</label>
+        <div class="input-group">
+            <span class="input-group-addon">
+                <i class="fa fa-edit fa-fw"></i>
+            </span>
+            <input type="text" value="{{ instance.name }}"
+                   name="name"
+                   class="form-control input_name"
+                   placeholder="{% trans "Enter your company name" %}"> </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <div class="organization-logo-wrapper">
+            <div class="clearfix">
+                <label for="">{% trans "Company logo" %}</label>
+                <a href="#" class="btn btn-default btn-xs pull-right uploader" id="organization-dropzone">
+                    <i class="fa fa-photo"></i> {% trans "select" %}
+                </a>
+                <input type="hidden" name="logo_url" id="logo-temp-path" value="" />
+
+            </div>
+            <div id="company-logo-uploader" class="logo text-center upload-widget">
+                <img class="organization-logo" id="organization-logo-preview"
+                     src="{{ instance.logo.crop.180x180 }}" alt="" >
+
+            </div>
+
+        </div>
+    </div>
+    <div class="col-md-8">
+        <div class="form-group">
+            <label class="control-label">{% trans "Contact Email" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-envelope fa-fw"></i>
+                </span>
+                <input type="text" value="{{ instance.email }}"
+                       name="email"
+                       class="form-control input_email"
+                       placeholder="{% trans "How can user contact you?" %}"> </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">{% trans "Website Link" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-edit fa-fw"></i>
+                </span>
+                <input type="text" value="{{ instance.url }}"
+                       name="url" class="form-control input_url"
+                       placeholder="{% trans "The main website of your business" %}"> </div>
+        </div>
+        <div class="form-group">
+            <label class="control-label">{% trans "Phone Number" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-phone fa-fw"></i>
+                </span>
+                <input type="text" value="{{ instance.phone }}"
+                       name="phone" class="form-control input_phone"
+                       placeholder="{% trans "You need them to call you, right?" %}"> </div>
+        </div>
+    </div>
+</div>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+       <div class="form-group">
+            <label class="control-label">{% trans "INN Identificator" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-flag fa-fw"></i>
+                </span>
+                <input type="text" value="{{ instance.inn }}"
+                       name="inn" class="form-control input_inn"
+                       placeholder="{% trans "Taxes INN" %}"> </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+       <div class="form-group">
+            <label class="control-label">{% trans "OGRN Identificator" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-flag fa-fw"></i>
+                </span>
+                <input type="text" value="{{ instance.ogrn }}"
+                       name="ogrn" class="form-control input_{{ form.ogrn.html_name }}"
+                       placeholder="{% trans "Taxes OGRN" %}"> </div>
+            </div>
+    </div>
+    <div class="col-md-4">
+        <div class="form-group">
+            <label class="control-label" for="company-category-input">{% trans "Company specialization" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-edit fa-fw"></i>
+                </span>
+                <select name="category" id="company-category-input" class="form-control">
+                    <option value="">{% trans "Unset" %}</option>
+                    {% for category in categories %}
+                        <optgroup label="{{ category.name }}">
+                            {% if category.children %}
+                                {% for child in category.children %}
+                                    <option value="{{ child.pk }}" {% if instance.category.pk == child.pk %}selected{% endif %}>{{ child.name }}</option>
+                                {% endfor %}
+                            {% endif %}
+
+                        </optgroup>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-4">
+       <div class="form-group {% if form.country.errors %}has-error{% endif %}">
+            <label class="control-label">{% trans "Country" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-flag fa-fw"></i>
+                </span>
+                {{ form.country }}
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4">
+       <div class="form-group {% if form.state.errors %}has-error{% endif %}">
+            <label class="control-label">{% trans "State/Region" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-flag fa-fw"></i>
+                </span>
+                <input type="text" value="{{ form.state.value|default_if_none:'' }}"
+                       name="{{ form.state.html_name }}" class="form-control input_{{ form.state.html_name }}"
+                       placeholder="{% trans "Type the state" %}">
+            </div>
+            </div>
+    </div>
+    <div class="col-sm-4">
+       <div class="form-group">
+            <label class="control-label">{% trans "City" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-flag fa-fw"></i>
+                </span>
+                <input type="text" value="{{ form.city.value|default_if_none:'' }}"
+                       name="city" class="form-control input_city"
+                       placeholder="{% trans "Type the city" %}">
+            </div>
+            </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-sm-6">
+        <div class="form-group {% if form.address_1.errors %}has-error{% endif %}">
+            <label class="control-label">{% trans "Address line 1" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-map-signs fa-fw"></i>
+                </span>
+
+                <input type="text" value="{{ form.address_1.value|default_if_none:'' }}"
+                       name="{{ form.address_1.html_name }}" class="form-control input_{{ form.state.html_name }}"
+                       placeholder="{% trans "Type your address" %}">
+            </div>
+
+        </div>
+    </div>
+    <div class="col-sm-6">
+        <div class="form-group {% if form.address_2.errors %}has-error{% endif %}">
+            <label class="control-label">{% trans "Address line 2" %}</label>
+            <div class="input-group">
+                <span class="input-group-addon">
+                    <i class="fa fa-map-signs fa-fw"></i>
+                </span>
+
+                <input type="text" value="{{ form.address_2.value|default_if_none:'' }}"
+                       name="{{ form.address_2.html_name }}" class="form-control input_{{ form.state.html_name }}"
+                       placeholder="{% trans "Type your address" %}">
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<div class="form-group {% if form.description.errors %}has-error{% endif %}">
+    <label class="control-label">{% trans "Company description" %}</label>
+    <div class="input-group">
+        <span class="input-group-addon">
+            <i class="fa fa-file-text fa-fw"></i>
+        </span>
+
+        <textarea name="{{ form.description.html_name }}" class="form-control input_{{ form.description.html_name }}"
+               placeholder="{% trans "About your company..." %}">{{ form.description.value|default_if_none:'' }}</textarea>
+    </div>
+</div>
+
+{% if form.non_field_errors %}
+<div class="alert alert-danger">
+    {{ form.non_field_errors.as_text }}
+</div>
+{% endif %}
+<div class="alert-wrapper"></div>
+<input type="hidden" value="{{ branch.pk }}" name="branch" />
+<button class="btn btn-primary btn-submit"
+        data-loading="{% trans "Saving" %}" type="submit">
+    <i class="fa fa-check"></i> {% trans "Save Changes" %}</button>

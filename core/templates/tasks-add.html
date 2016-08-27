@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load i18n %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-8  col-sm-offset-2 ">
+                <form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+                    <div class="form-widget">
+                        <div class="headline">
+                            <h3>{% trans "ADD/EDIT TASK" %}</h3>
+                        </div>
+                        <div class="caption">
+                                    <div class="form-group {% if form.name.errors %}has-error{% endif %}">
+                                        <label class="control-label">{% trans "Task Name" %}</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-edit fa-fw"></i>
+                                            </span>
+                                            <input type="text" value="{{ form.name.value|default_if_none:'' }}"
+                                                   name="{{ form.name.html_name }}"
+                                                   class="form-control input_{{ form.name.html_name }}" placeholder="{% trans "Employe first name" %}"> </div>
+                                            {% if form.name.errors %}
+                                                <span class="help-block">{{ form.name.errors.as_text }}</span>
+                                            {% endif %}
+                                    </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group {% if form.priority.errors %}has-error{% endif %}">
+                                        <label class="control-label">{% trans "Priority level" %}</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-edit fa-fw"></i>
+                                            </span>
+                                            <select name="{{ form.priority.html_name }}" id="">
+                                                {% for key, value in PRIORITY_CHOICES %}
+                                                    <option value="{{ key }}">{{  value}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            {% if form.priority.errors %}
+                                                <span class="help-block">{{ form.priority.errors.as_text }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group {% if form.status.errors %}has-error{% endif %}">
+                                        <label class="control-label">{% trans "Task Status" %}</label>
+                                        <div class="input-group">
+                                            <span class="input-group-addon">
+                                                <i class="fa fa-edit fa-fw"></i>
+                                            </span>
+                                            <select name="{{ form.status.html_name }}" id="">
+                                                {% for key, value in STATUS_CHOICES %}
+                                                    <option value="{{ key }}">{{  value}}</option>
+                                                {% endfor %}
+                                            </select>
+                                            {% if form.status.errors %}
+                                                <span class="help-block">{{ form.status.errors.as_text }}</span>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                                    <div class="form-group">
+                                        <label for="task-assign-to" class="control-label">{% trans "Assign to" %}</label>
+                                        <select name="{{ form.assigned_to.html_name }}" id="task-assign-to">
+                                            {% for person in ASSIGN_CHOICES %}
+                                                <option value="{{ person.user.pk }}">
+                                                    {{ person.get_full_name }} ({{ person.position }})
+                                                </option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="task-description" class="control-label">{% trans "Description" %}</label>
+                                        <textarea class="form-control" name="{{ form.description.html_name }}" id="task-description" cols="30"
+                                                  rows="10"></textarea>
+                                    </div>
+                                {% if form.non_field_errors %}
+                                <div class="alert alert-danger">
+                                    {{ form.non_field_errors.as_text }}
+                                </div>
+                                {% endif %}
+                        </div>
+                        <div class="widget-footer">
+                            <button class="btn btn-primary">{% trans "Submit" %}</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}

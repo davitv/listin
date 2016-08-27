@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load i18n staticfiles %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+            <div class="form-widget">
+                <div class="headline">
+                    <h3>{% blocktrans with organization_name=organization.name %}
+                            {{ organization_name }} open positions
+                        {% endblocktrans %}
+                    </h3>
+                </div>
+                <div class="caption">
+                    <div class="vacancies">
+                        {% for vacancy in vacancies %}
+                             <div class="vacancies-item">
+                             <h4 class="vacancy-headline">
+                                  {{ vacancy.name }}
+                              </h4>
+                              <div class="vacancy-description">
+                                <p>
+                                    {{ vacancy.description }}
+                                </p>
+
+                                    {% if vacancy.specialization %}
+                                    {% trans "Education" %}: {{ vacancy.specialization }} {{ vacancy.degree_verbose }}
+                                        <br>
+                                    {% endif %}
+                                    {% if vacancy.skills %}
+                                    {% trans "Needed skills" %}:
+                                        <ul class="list-inline">
+                                        {% for skill in vacancy.skills %}
+                                            <li>{{ skill.name }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                    {% if vacancy.languages %}
+                                    {% trans "Required languages for this position" %}:
+                                        <ul class="list-inline">
+                                        {% for language in vacancy.languages %}
+                                            <li>{{ language.name }}</li>
+                                        {% endfor %}
+                                        </ul>
+                                    {% endif %}
+                                    <div class="clearfix">
+                                        <span href="#" class="label label-default pull-left">
+                                            {{ vacancy.organization.country.name }} {{ vacancy.organization.city|default_if_none:"" }}</span>
+                                                                      <a href="#" class="btn btn-default btn-sm vacancy-apply">{% trans "Apply for this position" %}</a>
+
+                                    </div>
+                              </div>
+                             </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block page-css %}
+    <link rel="stylesheet" href="{% static 'css/animate.css' %}" />
+{% endblock %}
+
+{% block page-js %}
+<script src="{% static 'js/aja/aja.min.js' %}"></script>
+<script>
+'use strict';
+
+</script>
+{% endblock %}

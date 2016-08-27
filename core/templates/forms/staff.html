@@ -1,0 +1,101 @@
+{% load i18n %}
+<form action="" method="POST" enctype="multipart/form-data"> {% csrf_token %}
+        <div class="form-widget">
+            <div class="headline">
+                <h3>{% trans "ADD/EDIT STAFF" %}</h3>
+            </div>
+            <div class="caption">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group {% if form.first_name.errors %}has-error{% endif %}">
+                            <label class="control-label">{% trans "First Name" %}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-edit fa-fw"></i>
+                                </span>
+                                <input type="text" value="{{ form.first_name.value|default_if_none:'' }}"
+                                       name="{{ form.first_name.html_name }}"
+                                       class="form-control input_{{ form.first_name.html_name }}"
+                                       placeholder="{% trans "Employe first name" %}"> </div>
+                                {% if form.first_name.errors %}
+                                    <span class="help-block">{{ form.first_name.errors.as_text }}</span>
+                                {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group {% if form.last_name.errors %}has-error{% endif %}">
+                            <label class="control-label">{% trans "Last Name" %}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-edit fa-fw"></i>
+                                </span>
+                                <input type="text" value="{{ form.last_name.value|default_if_none:'' }}"
+                                       name="{{ form.last_name.html_name }}"
+                                       class="form-control input_{{ form.last_name.html_name }}"
+                                       placeholder="{% trans "Employe last name" %}"> </div>
+                                {% if form.last_name.errors %}
+                                    <span class="help-block">{{ form.last_name.errors.as_text }}</span>
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group {% if form.email.errors %}has-error{% endif %}">
+                            <label class="control-label">{% trans "Contact Email" %}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-envelope fa-fw"></i>
+                                </span>
+                                <input type="text" value="{{ form.email.value|default_if_none:'' }}"
+                                       name="{{ form.email.html_name }}"
+                                       class="form-control input_{{ form.email.html_name }}"
+                                       placeholder="{% trans "Employe email" %}"> </div>
+                                {% if form.email.errors %}
+                                    <span class="help-block">{{ form.email.errors.as_text }}</span>
+                                {% endif %}
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group {% if form.phone.errors %}has-error{% endif %}">
+                            <label class="control-label">{% trans "Phone Number" %}</label>
+                            <div class="input-group">
+                                <span class="input-group-addon">
+                                    <i class="fa fa-phone fa-fw"></i>
+                                </span>
+                                <input type="text" value="{{ form.phone.value|default_if_none:'' }}"
+                                       name="{{ form.phone.html_name }}"
+                                       class="form-control input_{{ form.phone.html_name }}"
+                                       placeholder="{% trans "Employe last name" %}"> </div>
+                                {% if form.phone.errors %}
+                                    <span class="help-block">{{ form.phone.errors.as_text }}</span>
+                                {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="staff-position" class="control-label">{% trans "Position" %}</label>
+                    <input type="text"  id="staff-position" class="form-control" name="{{ form.position.html_name }}"
+                           value="{{ form.position.value|default_if_none:"" }}"/>
+                </div>
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {{ form.non_field_errors.as_text }}
+                </div>
+                {% endif %}
+            </div>
+            <div class="widget-footer">
+                <button class="btn btn-primary">{% trans "Submit" %}</button>
+            </div>
+        </div>
+</div>
+</form>
+
+
+{% block page-css %}
+{{ form.media.css }}
+{% endblock %}
+{% block page-scripts %}
+{{ form.media.js }}
+{% endblock %}
