@@ -27,3 +27,14 @@ To start project on you local machine, run the following commands:
 This will make the app accessible on the host machine as http://localhost:8000/ .
 The codebase is located on the host machine, exported to the VM as a shared folder;
 code editing and Git operations will generally be done on the host.
+
+Building frontend
+-----------------
+You need to install React dev tools and sass compiler to build static files.
+```
+    cd core/static/
+    jsx -w jsx/:js/
+    sass -w scss/:css/
+```
+    
+
