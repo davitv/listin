@@ -65,7 +65,7 @@ class UserSerializer(serializers.ModelSerializer):
         data = super(UserSerializer, self).to_representation(instance)
         if not data['userpic']:
             data['userpic'] = dict(
-                map(lambda name, size: (name, self.get_size(size, instance.userpic), ),
+                map(lambda args: (args[0], self.get_size(args[1], instance.userpic),),
                     self.fields['userpic'].sizes)
             )
         return data
@@ -133,7 +133,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         data = super(UserRegistrationSerializer, self).to_representation(instance)
         if not data['userpic']:
             data['userpic'] = dict(
-                map(lambda name, size: (name, self.get_size(size, instance.userpic),),
+                map(lambda args: (args[0], self.get_size(args[1], instance.userpic),),
                     self.fields['userpic'].sizes)
             )
         return data
