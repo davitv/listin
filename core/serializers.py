@@ -20,7 +20,7 @@ from utils.files import (
 
 from market.serializers import ProductSerializer
 from core.models import (
-    Organization, Comment, Category,
+    Organization, Branch, Comment, Category,
     Staff, Vacancy, Rating, VisitorMessage,
     OrganizationProduct, User
 )
@@ -290,6 +290,7 @@ class OrganizationSerializer(serializers.ModelSerializer):
     visitor_message_url = serializers.SerializerMethodField()
     category = serializers.PrimaryKeyRelatedField(queryset=Category.objects.all(), required=True)
     vacancies = OrganizationVacancySerializer(read_only=True, many=True)
+    full_address = serializers.SerializerMethodField()
 
     image = VersatileImageFieldSerializer(
         required=False,
@@ -355,6 +356,20 @@ class OrganizationSerializer(serializers.ModelSerializer):
             ret['category'] = instance.category.name
         return ret
 
+    def get_full_address(self, obj):
+        return "%s %s %s %s %s" % (obj.country.name, obj.state, obj.city, obj.address_1, obj.address_2)
+
+
+class BranchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Branch
+        exclude = (
+            'organization',
+        )
+    full_address = serializers.SerializerMethodField()
+
+    def get_full_address(self, obj):
+        return "%s %s %s %s %s" % (obj.country.name, obj.state, obj.city, obj.address_1, obj.address_2)
 
 class CommentSerializer(serializers.ModelSerializer):
     user = UserSerializer(many=False, read_only=True)
