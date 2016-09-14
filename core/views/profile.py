@@ -100,7 +100,7 @@ class UserApiView(generics.RetrieveUpdateAPIView):
         ---
         # YAML (must be separated by `---`)
 
-        serializer: profiles.serializers.UserSerializer
+        serializer: core.serializers.UserSerializer
         omit_serializer: false
 
         parameters_strategy: merge
@@ -133,7 +133,7 @@ class RegistrationApiView(generics.CreateAPIView):
         """
         Your docs
         ---
-        serializer: profiles.serializers.UserRegistrationSerializer
+        serializer: core.serializers.UserRegistrationSerializer
         omit_serializer: false
 
         parameters_strategy: merge
