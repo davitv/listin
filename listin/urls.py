@@ -128,6 +128,10 @@ urlpatterns += [
 
         url(r'^auth/login/$', RegistrationApiView.as_view(), name="api-login"),
         url(r'^auth/signup/$', RegistrationApiView.as_view(), name="api-signup"),
+
+        url(r'^branches/$', api.BranchesList.as_view(), name="api-branches"),
+
+
         url(r'^profile/$', UserApiView.as_view(), name="api-profile"),
 
         url(r'^categories/$', api.CategoriesApiView.as_view(), name="api-categories"),
@@ -143,19 +147,15 @@ urlpatterns += [
             name="api-visitor-message"),
         url(r'^organizations/(?P<organization_pk>[0-9]+)/staff/$', api.BusinessStaffList.as_view(),
             name="api-staff-list"),
-        url(r'^organizations/(?P<pk>[0-9]+)/rating/$', api.RatingList.as_view(),
-            name="api-rating"),
+        url(r'^rating/$', api.RatingList.as_view(), name="api-rating"),
         url(r'^organizations/(?P<organization_pk>[0-9]+)/messages/$', api.OrganizationMessagesListView.as_view(),
             name="api-messages-list"),
-        url(r'^organizations/(?P<organization_pk>[0-9]+)/partners/$', api.OrganizationPartnersListView.as_view(),
-            name="api-partners-list"),
+        url(r'^partners/$', api.OrganizationPartnersListView.as_view(),  name="api-partners-list"),
         url(r'^organizations/favorites/$', api.FavoriteBusinessList.as_view(),
             name="api-organizations-favorites"),
 
-        url(r'^vacancies/$', api.VacanciesListView.as_view(),
-            name="api-vacanacies-list"),
-        url(r'^vacancies/(?P<pk>[0-9]+)/', api.VacanciesUpdateView.as_view(),
-            name="api-vacancies-update"),
+        url(r'^vacancies/$', api.VacanciesListView.as_view(), name="api-vacanacies-list"),
+        url(r'^vacancies/(?P<pk>[0-9]+)/', api.VacanciesUpdateView.as_view(), name="api-vacancies-update"),
 
         url(r'^products/(?P<pk>[0-9]+)/$', api.ProductDetailsView.as_view(),
             name="api-product-details"),

@@ -11,13 +11,13 @@ from rest_framework import mixins
 from rest_framework.response import Response
 
 from core.serializers import (
-    OrganizationSerializer, CommentSerializer, StaffSerializer,
+    OrganizationSerializer, BranchSerializer, CommentSerializer, StaffSerializer,
     RatingResponseSerializer, VacancySerializer, TempFileUploadSerializer,
     VisitorMessageSerializer, OrganizationProductSerializer, CategorySerializer,
 )
 
 from core.models import (
-    Organization, Comment, Staff,
+    Organization, Branch, Comment, Staff,
     Rating, Vacancy, Partnership,
     Category, VisitorMessage
 )
@@ -130,6 +130,11 @@ class FavoriteBusinessList(generics.ListAPIView):
         else:
             queryset = queryset.filter(pk__in=pks)
         return queryset
+
+
+class BranchesList(generics.ListAPIView):
+    serializer_class = BranchSerializer
+    queryset = Branch.objects.all()
 
 
 class CommentListCreate(generics.ListCreateAPIView):
@@ -249,16 +254,18 @@ class OrganizationPartnersListView(generics.ListCreateAPIView):
     queryset = Organization.objects.all()
 
     def get_queryset(self):
-        # DIRTY METHOD!!
-        # TODO: clean this up, find a way to do this in one query
         queryset = super(OrganizationPartnersListView, self).get_queryset()
-        organization = Organization.objects.get(pk=self.kwargs.get('organization_pk'))
+        print(">>>>" * 10)
+        organization_id = self.request.GET.get('organization_id', 0)
+        organization = Organization.objects.get(pk=organization_id)
+
         sent_requests = Partnership.objects.filter(status=1, organization=organization)\
             .select_related('partner')
+
         received_requests = Partnership.objects.filter(status=1, partner=organization)\
             .select_related('organization')
-        # collect pks and filter again
-        # this is a dirty method
+
+        # Collect pks and filter again
         queryset = queryset.filter(
             pk__in=[partnership.partner.pk for partnership in sent_requests] +
                    [partnership.organization.pk for partnership in received_requests]
@@ -346,10 +353,12 @@ class RatingList(mixins.RetrieveModelMixin,
     filter_fields = ('organization', )
 
     def retrieve(self, request, *args, **kwargs):
-        queryset = Rating.objects.filter(organization__pk=self.kwargs['pk'])
+        organization_id = request.GET.get('organization_id', 0)
+        queryset = Rating.objects.filter(organization__pk=organization_id)
         total = queryset.count()
         positive = queryset.filter(is_positive=True).count()
         negative = queryset.filter(is_positive=False).count()
+
         return Response(data={
             'total': total,
             'positive': positive,
