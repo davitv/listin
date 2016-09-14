@@ -393,171 +393,26 @@
             {% endif %}
         </div>
     </div>
-
+<input type="hidden" id="organization-id" value="{{organization.id}}" />
+<input type="hidden" id="is-authenticated" value="{% if request.user.is_authenticated %}1{%else%}0{%endif%}" />
 {% endblock %}
 
 {% block page-css %}{% endblock %}
 {% block page-js %}
     <script src="http://code.highcharts.com/highcharts.js"></script>
     <script src="https://api-maps.yandex.ru/2.1/?lang=ru_RU" type="text/javascript"></script>
+    <script src="{% static 'js_dist/app.js' %}"></script>
 
     <script src="{% static 'js/tabs.js' %}"></script>
     <script src="{% static 'js/swiper.min.js' %}"></script>
     <script src="{% static 'js/eventEmitter/EventEmitter.min.js' %}"></script>
     <script src="{% static 'js/moment-with-locales.min.js' %}"></script>
     <script src="{% static 'js/aja/aja.min.js' %}"></script>
+
     <script src="{% static 'js/comments-widget.js' %}"></script>
     <script src="{% static 'js/homepage-widget.js' %}"></script>
     <script src="{% static 'js/rating-widget.js' %}"></script>
     <script src="{% static 'js_dist/cart.js' %}"></script>
-    <script>
-(function(){
-    moment.locale('ru');
-    ymaps.ready(init);
-    var branches_map;
-    function init(){
-        branches_map = new ymaps.Map ("branches-map", {
-            center: [55.76, 37.64],
-            zoom: 7
-        });
-        {% for branch in organization.branch_set.all %}
-            (function(address){
-                var gcoder = ymaps.geocode(address);
-                gcoder.then(
-                    function (res) {
-                        branches_map.geoObjects.add(res.geoObjects);
-                    },
-                    function (err) {
-                        console.error(err)
-                    }
-                );
-            })("{{ branch.full_address }}");
-        {% endfor %}
-    }
-
-    var description_toggler = document.getElementById('toggle-description');
-    var description_wrapper = document.getElementById('description-wrapper');
-    description_toggler.addEventListener('click', function(event){
-       event.preventDefault();
-       description_wrapper.classList.contains('open') ? description_wrapper.classList.remove('open') :
-               description_wrapper.classList.add('open');
-    });
-
-    new HomepageWidget(document.getElementById("partners"),
-        {
-            // list global business data
-            url: '{% url "api-partners-list" organization.pk %}',
-            is_favorite: false,
-            showCategories: false,
-
-            // https://www.squarefree.com/securitytips/web-developers.html#CSRF
-            csrf_token: "{{ csrf_token }}"
-        }
-    );
-
-    // Customer comments widget
-    CommentsWidget(
-            document.getElementById("widget-comments"),
-            {
-                // url for list/create comments data
-                url: "{% url 'api-comments' %}",
-                organization_id: {{ organization.pk }},
-                is_authed: true,
-                // https://www.squarefree.com/securitytips/web-developers.html#CSRF
-                csrf_token: "{{ csrf_token }}"
-            }
-    );
-
-    var tabs =  new Tabs(document.getElementsByClassName('widget-tabs')[0]);
-    var tabs2 =  new Tabs(document.getElementsByClassName('comments-tabs')[0]);
-    var tabs3 =  new Tabs(document.getElementsByClassName('widget-branches')[0]);
-    var btn_widget_branches = document.getElementById('btn-widget-branches');
-
-    !!btn_widget_branches && btn_widget_branches.addEventListener('click', function(event){
-        this.setAttribute('href', tabs3.getActiveToggler().getAttribute('href'));
-    });
-
-    new Highcharts.Chart({
-        chart: {
-            renderTo: 'container'
-        },
-        title: {
-            text: "{% trans "Company growth" %}"
-        },
-        xAxis: {
-            type: 'datetime'
-        },
-
-        series: [{
-            data: [],
-            pointStart: Date.UTC(2013, 0, 1),
-            pointInterval: 3600 * 1000 * 24 * 30 // one month
-        }]
-    });
-    window.onload = function(){
-        new Swiper ('.featured-slider', {
-            // Optional parameters
-            loop: true,
-            autoplay: 3000,
-            // If we need pagination
-            pagination: '.swiper-pagination'
-        });
-        new Swiper ('.popular-slider', {
-            // Optional parameters
-            loop: true,
-            autoplay: 2000,
-            // If we need pagination
-            pagination: '.swiper-pagination'
-        });
-    };
-
-    function sendForm(form, callback) {
-        var formData = new FormData(form);
-        var xhr = new XMLHttpRequest();
-        xhr.open("POST", form.getAttribute("action"));
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        xhr.onreadystatechange = function() { // (3)
-          if (xhr.readyState != 4) return;
-          if (xhr.status != 200) {
-              console.log(JSON.parse(xhr.responseText));
-              var data = JSON.parse(xhr.responseText);
-              showErrors(form, data)
-          } else {
-              callback && callback(JSON.parse(xhr.responseText))
-          }
-        };
-        xhr.send(formData);
-    }
-
-     var image_form = document.getElementById('business_image_upload');
-     var image_file = document.getElementById("file_input");
-     !!image_file && image_file.addEventListener("change", function(event){
-        sendForm(image_form, function(res){
-            var imgs_organization = document.getElementsByClassName('img-organization');
-            for(var i = 0, l = imgs_organization.length; i < l; i++)
-            {
-                imgs_organization[i].setAttribute('src', res.image.medium_square_crop);
-            }
-        });
-     });
-
-
-    new RatingWidget(
-        document.getElementById('rating-widget'),
-        {
-            retrieve_url: "{% url "api-rating" organization.pk %}",
-            vote_url: "{% url "api-rating" organization.pk %}",
-            csrf_token: "{{ csrf_token }}",
-            social_urls: {
-              fb: "{% url 'social:begin' 'facebook' %}?next={% url 'organization-view' organization.pk %}",
-              vk: "{% url 'social:begin' 'vk-oauth2' %}?next={% url 'organization-view' organization.pk %}",
-              gp: "{% url 'social:begin' 'google-plus' %}?next={% url 'organization-view' organization.pk %}"
-            },
-            is_authenticated: {% if request.user.is_authenticated %}true{% else %}false{% endif %}
-        }
-    )
-})();
-</script>
 {% endblock %}
 
 
