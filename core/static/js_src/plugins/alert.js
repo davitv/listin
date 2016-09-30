@@ -39,6 +39,7 @@
         return a;
     }
 
+
     function Alert( element, options ) {
         this.element = element;
         this.option(options);

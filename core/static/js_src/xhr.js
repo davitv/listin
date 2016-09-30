@@ -4,6 +4,7 @@
 
     var BRANCHES_URL = '/api/branches/';
     var ORGANIZATION_URL = '/api/organizations/my/';
+    var CATEGORIES_URL = '/api/categories/';
 
     var noop = function(){};
 
@@ -24,6 +25,9 @@
         },
         organization: function(callback, err) {
             get(ORGANIZATION_URL, {}, callback, err)
+        },
+        categories: function(callback, err) {
+            get(CATEGORIES_URL, {}, callback, err)
         }
     }
 

@@ -1,19 +1,22 @@
-import 'babel-polyfill'
-
 import Swiper from 'swiper'
 import EvEmitter from 'ev-emitter'
 import moment from 'moment'
 import aja from 'aja'
+import xhr from 'xhr'
 
+import Highcharts from 'highcharts'
 import Tabs from 'plugins/tabs'
 
 import CommentsWidget from 'jsx/comments-widget'
 import HomepageWidget from 'jsx/homepage-widget'
 import RatingWidget from 'jsx/rating-widget'
 
-import xhr from 'xhr'
+import CSRF_TOKEN from 'csrf'
 
 module.exports = function(){
+
+    // Yandex maps are in global scope
+    ymaps = window.ymaps
     moment.locale('ru');
 
     const ORGANIZATION_ID = document.getElementById('organization-id').value
@@ -21,7 +24,6 @@ module.exports = function(){
     const URL_PARTNERS = '/api/partners/'
     const URL_COMMENTS = '/api/comments/'
     const URL_RATING = '/api/rating/'
-    const CSRF_TOKEN = 'asdasda'
 
     var loadBranchesData = new Promise((resolve, reject) => {
         xhr.branches(ORGANIZATION_ID, (data) => resolve(data))
@@ -76,7 +78,7 @@ module.exports = function(){
             showCategories: false,
 
             // https://www.squarefree.com/securitytips/web-developers.html#CSRF
-            csrf_token: "{{ csrf_token }}"
+            csrf_token: CSRF_TOKEN
         }
     );
 

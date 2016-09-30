@@ -299,6 +299,7 @@ function factory(React, ReactDOM, aja, StoreWrapper, Simodal){
         },
         componentDidMount: function(){
             var _this = this;
+            console.log(StoreWrapper)
             this.setState({
                 favorites: StoreWrapper.get('favorites') || []
             });

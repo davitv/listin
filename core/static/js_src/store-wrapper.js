@@ -10,7 +10,7 @@
     if ( typeof define == 'function' && define.amd ) {
         // AMD
         define( [
-                'ev-emitter',
+                'eventEmitter/EventEmitter',
                 'store'
             ],
             function(  EventEmitter, store ) {
@@ -20,19 +20,19 @@
         // CommonJS
         module.exports = factory(
             window,
-            require('ev-emitter'),
+            require('eventEmitter/EventEmitter'),
             require('store')
         );
     } else {
         // browser global
         window.StoreWrapper = factory(
             window,
-            window.EvEmitter,
+            window.EventEmitter,
             window.store
         );
     }
 
-}( window, function factory( window, EvEmitter, store) {
+}( window, function factory( window, EventEmitter, store) {
 
     'use strict';
     function noop() {}
@@ -54,8 +54,8 @@
 
     }
 
-    // inherit EvEmitter methods
-    extend( StoreWrapper.prototype, EvEmitter.prototype );
+    // inherit EventEmitter methods
+    extend( StoreWrapper.prototype, EventEmitter.prototype );
 
     StoreWrapper.defaults = {
 
@@ -71,7 +71,7 @@
 
     StoreWrapper.prototype.set = function( key, value ) {
         var res = store.set(key, value);
-        this.emitEvent('itemAdded', key, value);
+        this.emit('itemAdded', key, value);
         return res;
     };
 
