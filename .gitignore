@@ -5,4 +5,5 @@
 /media
 __pycache__
 node_modules
+/deploy_tools
 .sass-cache
