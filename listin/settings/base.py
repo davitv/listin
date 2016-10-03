@@ -383,8 +383,3 @@ MARKET_PRODUCT_KIND_CHOICES = (
     (1, _('Service'),),
     (2, _('Project'),),
 )
-# Use local settings if there is one
-try:
-    from settings_local import *
-except ImportError:
-    pass
